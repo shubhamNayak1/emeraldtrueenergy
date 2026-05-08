@@ -58,8 +58,8 @@ Edit `QUOTE_RATES` in `src/content/settings.ts` and push. Every PDF generated af
 1. **GitHub repo → Settings → Pages**
    - **Source**: GitHub Actions
    - Save.
-2. **Push to `main`** (you've already done this).
-3. The first run of `.github/workflows/deploy.yml` builds + publishes the site.
+2. Push to `main` (you've already done this).
+3. The workflow at `.github/workflows/nextjs.yml` builds + publishes the site.
 4. Site is live at `https://shubhamnayak1.github.io/emeraldtrueenergy/` within ~2 minutes.
 
 ### Custom domain (later)
@@ -70,7 +70,7 @@ When you buy a domain (e.g. `emeraldtrueenergy.in`):
 2. At your DNS registrar, point the domain at GitHub Pages:
    - `A` records → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
    - Or `CNAME` (for `www`) → `shubhamnayak1.github.io`
-3. **Edit `.github/workflows/deploy.yml`** — change `NEXT_PUBLIC_BASE_PATH: /emeraldtrueenergy` to `NEXT_PUBLIC_BASE_PATH: ""`. Commit. Site rebuilds at the custom domain with no path prefix.
+3. The workflow's `actions/configure-pages` step detects the custom domain and drops the path prefix automatically — no config edits needed.
 
 ## Quotation math (for reference)
 
