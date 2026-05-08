@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { X, Loader2, Download } from "lucide-react";
 import { calculateQuote } from "@/lib/quote";
 import { QUOTE_RATES, SETTINGS } from "@/content/settings";
@@ -21,8 +22,19 @@ export function QuoteWizard({ open, onClose }: Props) {
   const [form, setForm] = useState<QuoteForm>(EMPTY);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-  if (!open) return null;
+  useEffect(() => { setMounted(true); }, []);
+
+  // Lock background scroll while the dialog is open.
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; };
+  }, [open]);
+
+  if (!open || !mounted) return null;
 
   const validate = (): string | null => {
     const kW = Number(form.kW);
@@ -76,9 +88,9 @@ export function QuoteWizard({ open, onClose }: Props) {
   const set = <K extends keyof QuoteForm>(k: K, v: QuoteForm[K]) =>
     setForm((f) => ({ ...f, [k]: v }));
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/50 px-4"
+      className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-ink/50 p-4"
       onClick={onClose}
     >
       <div
@@ -165,7 +177,8 @@ export function QuoteWizard({ open, onClose }: Props) {
           box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
         }
       `}</style>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
