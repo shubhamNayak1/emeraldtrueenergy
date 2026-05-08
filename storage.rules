@@ -1,0 +1,28 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Public-read folders for project photos and review/client photos.
+    match /projects/{file=**} {
+      allow read: if true;
+      allow write: if isAdmin()
+                   && request.resource.size < 8 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*');
+    }
+    match /reviews/{file=**} {
+      allow read: if true;
+      allow write: if isAdmin()
+                   && request.resource.size < 4 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*');
+    }
+    match /branding/{file=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

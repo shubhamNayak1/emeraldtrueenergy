@@ -1,0 +1,42 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Public read collections (services, projects, reviews); admin-only write.
+    match /services/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /projects/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /reviews/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Site-level singletons (settings + quote rates) are public-read, admin-write.
+    match /siteSettings/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /quoteRates/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Leads: anyone can create (contact form / quote wizard); only admin can read or modify.
+    match /leads/{id} {
+      allow read, update, delete: if isAdmin();
+      allow create: if request.resource.data.keys().hasAll(['type', 'name', 'phone', 'createdAt'])
+                    && request.resource.data.type in ['contact', 'quote']
+                    && request.resource.data.status == 'new';
+    }
+  }
+}
