@@ -1,5 +1,9 @@
 import { MessageCircle } from "lucide-react";
-import { whatsAppLink } from "@/lib/data";
+
+function whatsAppLink(phone: string, message?: string): string {
+  const clean = phone.replace(/[^\d]/g, "");
+  return `https://wa.me/${clean}${message ? `?text=${encodeURIComponent(message)}` : ""}`;
+}
 
 export function ContactWhatsAppButton({ phone }: { phone: string }) {
   const configured = phone && !phone.includes("XXXX");

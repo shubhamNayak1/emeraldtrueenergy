@@ -1,33 +1,20 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { MessageCircle } from "lucide-react";
-import { getSiteSettings, whatsAppLink } from "@/lib/data";
-import { DEFAULT_SETTINGS } from "@/lib/data";
+import { SETTINGS } from "@/content/settings";
+
+function whatsAppLink(phone: string, message?: string): string {
+  const clean = phone.replace(/[^\d]/g, "");
+  return `https://wa.me/${clean}${message ? `?text=${encodeURIComponent(message)}` : ""}`;
+}
 
 export function WhatsAppFab() {
-  const [phone, setPhone] = useState(DEFAULT_SETTINGS.ownerWhatsApp);
-
-  useEffect(() => {
-    let cancelled = false;
-    getSiteSettings()
-      .then((s) => {
-        if (!cancelled) setPhone(s.ownerWhatsApp);
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  if (!phone || phone.includes("XXXX")) {
-    // Avoid rendering a broken link when no real number is configured yet.
-    return null;
-  }
+  if (!SETTINGS.ownerWhatsApp || SETTINGS.ownerWhatsApp.includes("XXXX")) return null;
 
   return (
     <a
-      href={whatsAppLink(phone, "Hi! I'd like to know more about your solar solutions.")}
+      href={whatsAppLink(
+        SETTINGS.ownerWhatsApp,
+        "Hi! I'd like to know more about your solar solutions.",
+      )}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"

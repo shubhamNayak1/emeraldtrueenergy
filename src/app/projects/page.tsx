@@ -1,11 +1,8 @@
-import { getProjects } from "@/lib/data";
+import { PROJECTS } from "@/content/projects";
 
-export const revalidate = 60;
 export const metadata = { title: "Projects" };
 
-export default async function ProjectsPage() {
-  const projects = await safe(getProjects);
-
+export default function ProjectsPage() {
   return (
     <section className="section-pad">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -21,16 +18,16 @@ export default async function ProjectsPage() {
           </p>
         </header>
 
-        {projects.length === 0 ? (
+        {PROJECTS.length === 0 ? (
           <div className="mx-auto mt-16 max-w-md rounded-2xl border border-dashed border-emerald-200 bg-white/60 px-6 py-10 text-center text-sm text-ink/55">
-            Project photos will appear here once uploaded from the admin panel.
+            Project photos will appear here once added to src/content/projects.ts.
           </div>
         ) : (
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((p) => (
-              <article key={p.id} className="overflow-hidden rounded-2xl bg-white shadow-sm transition hover:shadow-md">
+            {PROJECTS.map((p) => (
+              <article key={p.photo} className="overflow-hidden rounded-2xl bg-white shadow-sm transition hover:shadow-md">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={p.photoUrl} alt={p.title} className="aspect-[4/3] w-full object-cover" />
+                <img src={p.photo} alt={p.title} className="aspect-[4/3] w-full object-cover" />
                 <div className="p-5">
                   <h3 className="font-semibold text-emerald-900">{p.title}</h3>
                   <p className="mt-1 text-sm text-ink/60">
@@ -47,8 +44,4 @@ export default async function ProjectsPage() {
       </div>
     </section>
   );
-}
-
-async function safe<T>(fn: () => Promise<T[]>): Promise<T[]> {
-  try { return await fn(); } catch { return []; }
 }

@@ -1,16 +1,11 @@
 import Link from "next/link";
 import { ArrowRight, Sun, ShieldCheck, Wrench, Phone } from "lucide-react";
-import { getProjects, getReviews, getServices } from "@/lib/data";
+import { SERVICES } from "@/content/services";
+import { PROJECTS } from "@/content/projects";
+import { REVIEWS } from "@/content/reviews";
+import { SETTINGS } from "@/content/settings";
 
-export const revalidate = 60;
-
-export default async function HomePage() {
-  const [services, projects, reviews] = await Promise.all([
-    safe(getServices),
-    safe(getProjects),
-    safe(getReviews),
-  ]);
-
+export default function HomePage() {
   return (
     <>
       <section className="relative overflow-hidden">
@@ -18,17 +13,15 @@ export default async function HomePage() {
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pt-16 pb-20 sm:px-6 md:grid-cols-2 md:pt-24 md:pb-28">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-medium text-emerald-800">
-              <Sun className="h-3.5 w-3.5" /> Powering Madhya Pradesh, one rooftop at a time
+              <Sun className="h-3.5 w-3.5" /> {SETTINGS.heroEyebrow}
             </span>
             <h1 className="mt-5 text-4xl font-bold leading-tight text-emerald-900 sm:text-5xl md:text-6xl">
-              Clean energy. <br />
-              <span className="text-emerald-700">Real savings.</span>{" "}
-              <span className="text-sun-500">Built to last.</span>
+              {SETTINGS.heroTitle1} <br />
+              <span className="text-emerald-700">{SETTINGS.heroTitle2}</span>{" "}
+              <span className="text-sun-500">{SETTINGS.heroTitle3}</span>
             </h1>
             <p className="mt-6 max-w-lg text-lg leading-relaxed text-ink/70">
-              Premium rooftop solar installations across Madhya Pradesh —
-              engineered with top-tier panels, inverters, and full-service
-              support for homes and businesses.
+              {SETTINGS.heroSubtitle}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -71,21 +64,17 @@ export default async function HomePage() {
             title="Solar solutions for every roof"
             sub="From small homes to commercial sites, we design and install systems sized to your bill."
           />
-          {services.length === 0 ? (
-            <EmptyState text="Services will appear here once added from the admin panel." />
-          ) : (
-            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {services.slice(0, 6).map((s) => (
-                <article key={s.id} className="rounded-2xl border border-emerald-100 bg-white p-6 transition hover:border-emerald-300 hover:shadow-md">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
-                    <Sun className="h-5 w-5" />
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold text-emerald-900">{s.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-ink/65 line-clamp-3">{s.description}</p>
-                </article>
-              ))}
-            </div>
-          )}
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {SERVICES.slice(0, 6).map((s) => (
+              <article key={s.title} className="rounded-2xl border border-emerald-100 bg-white p-6 transition hover:border-emerald-300 hover:shadow-md">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                  <Sun className="h-5 w-5" />
+                </div>
+                <h3 className="mt-4 text-lg font-semibold text-emerald-900">{s.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink/65 line-clamp-3">{s.description}</p>
+              </article>
+            ))}
+          </div>
           <div className="mt-8 text-center">
             <Link href="/services" className="text-sm font-semibold text-emerald-700 hover:text-emerald-900">
               View all services →
@@ -101,14 +90,14 @@ export default async function HomePage() {
             title="Installations across Madhya Pradesh"
             sub="A glimpse of what we've delivered for homes and businesses near you."
           />
-          {projects.length === 0 ? (
-            <EmptyState text="Project photos will appear here once uploaded from the admin panel." />
+          {PROJECTS.length === 0 ? (
+            <EmptyState text="Project photos will appear here once added to src/content/projects.ts." />
           ) : (
             <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {projects.slice(0, 6).map((p) => (
-                <article key={p.id} className="overflow-hidden rounded-2xl bg-white shadow-sm">
+              {PROJECTS.slice(0, 6).map((p) => (
+                <article key={p.photo} className="overflow-hidden rounded-2xl bg-white shadow-sm">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={p.photoUrl} alt={p.title} className="aspect-[4/3] w-full object-cover" />
+                  <img src={p.photo} alt={p.title} className="aspect-[4/3] w-full object-cover" />
                   <div className="p-4">
                     <h3 className="font-semibold text-emerald-900">{p.title}</h3>
                     <p className="mt-1 text-sm text-ink/60">{p.location}{p.kW ? ` · ${p.kW} kW` : ""}</p>
@@ -120,13 +109,13 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {reviews.length > 0 && (
+      {REVIEWS.length > 0 && (
         <section className="section-pad">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <SectionHead eyebrow="Client voices" title="Trusted by homes & businesses" />
             <div className="mt-10 grid gap-5 md:grid-cols-3">
-              {reviews.slice(0, 3).map((r) => (
-                <figure key={r.id} className="rounded-2xl border border-emerald-100 bg-white p-6">
+              {REVIEWS.slice(0, 3).map((r, idx) => (
+                <figure key={idx} className="rounded-2xl border border-emerald-100 bg-white p-6">
                   <div className="flex gap-0.5 text-sun-500">
                     {Array.from({ length: r.stars }).map((_, i) => (
                       <Star key={i} />
@@ -160,14 +149,6 @@ export default async function HomePage() {
       </section>
     </>
   );
-}
-
-async function safe<T>(fn: () => Promise<T[]>): Promise<T[]> {
-  try {
-    return await fn();
-  } catch {
-    return [];
-  }
 }
 
 function SectionHead({ eyebrow, title, sub }: { eyebrow: string; title: string; sub?: string }) {

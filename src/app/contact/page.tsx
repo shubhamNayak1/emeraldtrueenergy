@@ -1,23 +1,13 @@
 import { Mail, MapPin, Phone } from "lucide-react";
-import { ContactForm } from "@/components/site/ContactForm";
 import { ContactWhatsAppButton } from "@/components/site/ContactWhatsAppButton";
-import { getSiteSettings } from "@/lib/data";
-import { DEFAULT_SETTINGS } from "@/lib/data";
+import { SETTINGS } from "@/content/settings";
 
-export const revalidate = 60;
 export const metadata = { title: "Contact" };
 
-export default async function ContactPage() {
-  let settings = DEFAULT_SETTINGS;
-  try {
-    settings = await getSiteSettings();
-  } catch {
-    /* fall back to defaults */
-  }
-
+export default function ContactPage() {
   return (
     <section className="section-pad">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6">
         <header className="text-center">
           <span className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
             Get in touch
@@ -26,52 +16,73 @@ export default async function ContactPage() {
             Talk to us
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-base text-ink/65">
-            Tell us about your roof and your bill — we'll come back with a sized recommendation.
+            The fastest way to reach us is WhatsApp — we typically reply within an hour.
           </p>
         </header>
 
-        <div className="mt-12 grid gap-8 lg:grid-cols-5">
-          <div className="lg:col-span-3">
-            <div className="rounded-2xl border border-emerald-100 bg-white p-6 sm:p-8">
-              <h2 className="text-xl font-semibold text-emerald-800">Send us a message</h2>
-              <p className="mt-1 text-sm text-ink/60">
-                We typically respond within a working day.
-              </p>
-              <div className="mt-6">
-                <ContactForm />
-              </div>
-            </div>
+        <div className="mt-12 space-y-4">
+          <ContactWhatsAppButton phone={SETTINGS.ownerWhatsApp} />
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <ActionCard
+              href={`tel:${SETTINGS.publicPhone.replace(/\s+/g, "")}`}
+              icon={<Phone className="h-6 w-6" />}
+              title="Call us"
+              detail={SETTINGS.publicPhone}
+            />
+            <ActionCard
+              href={`mailto:${SETTINGS.publicEmail}?subject=${encodeURIComponent("Solar enquiry")}`}
+              icon={<Mail className="h-6 w-6" />}
+              title="Email us"
+              detail={SETTINGS.publicEmail}
+            />
           </div>
 
-          <aside className="lg:col-span-2 space-y-4">
-            <ContactWhatsAppButton phone={settings.ownerWhatsApp} />
-
-            <div className="rounded-2xl border border-emerald-100 bg-white p-6">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-emerald-800">
-                Reach us
-              </h3>
-              <ul className="mt-4 space-y-4 text-sm text-ink/75">
-                <li className="flex items-start gap-3">
-                  <Phone className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
-                  <a href={`tel:${settings.companyPhone.replace(/\s+/g, "")}`} className="hover:text-emerald-700">
-                    {settings.companyPhone}
-                  </a>
-                </li>
-                <li className="flex items-start gap-3">
-                  <Mail className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
-                  <a href={`mailto:${settings.ownerEmail}`} className="hover:text-emerald-700">
-                    {settings.ownerEmail}
-                  </a>
-                </li>
-                <li className="flex items-start gap-3">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
-                  <span>{settings.companyAddress}</span>
-                </li>
-              </ul>
+          <div className="flex items-start gap-4 rounded-2xl border border-emerald-100 bg-white p-5">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+              <MapPin className="h-6 w-6" />
             </div>
-          </aside>
+            <div>
+              <div className="text-sm font-semibold uppercase tracking-wider text-emerald-800">
+                Where we are
+              </div>
+              <div className="text-base font-bold text-ink">{SETTINGS.address}</div>
+              <p className="mt-1 text-sm text-ink/60">
+                Site visits across Madhya Pradesh — get in touch and we'll set one up.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function ActionCard({
+  href,
+  icon,
+  title,
+  detail,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  title: string;
+  detail: string;
+}) {
+  return (
+    <a
+      href={href}
+      className="flex items-center gap-4 rounded-2xl border border-emerald-100 bg-white p-5 transition hover:border-emerald-300 hover:shadow-sm"
+    >
+      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+        {icon}
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="text-sm font-semibold uppercase tracking-wider text-emerald-800">
+          {title}
+        </div>
+        <div className="text-base font-bold text-ink truncate">{detail}</div>
+      </div>
+    </a>
   );
 }

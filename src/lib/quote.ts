@@ -1,17 +1,26 @@
-import type { QuoteBreakdown, QuoteRates } from "./types";
+export type QuoteRates = {
+  netMeterUnder5kW: number;
+  netMeterFiveKWPlus: number;
+  labourPerKW: number;
+  materialPerKW: number;
+  inverterPerKW: number;
+  panelWattage: number;
+  panelRateBase: number;
+  panelMargin: number;
+  transportPerKW: number;
+  includeTransport: boolean;
+};
 
-export const DEFAULT_QUOTE_RATES: QuoteRates = {
-  netMeterUnder5kW: 5000,
-  netMeterFiveKWPlus: 25000,
-  labourPerKW: 2000,
-  materialPerKW: 8000,
-  inverterPerKW: 7000,
-  panelWattage: 545,
-  panelRateBase: 15.25,
-  panelMargin: 1.05,
-  transportPerKW: 1000,
-  includeTransport: true,
-  currency: "INR",
+export type QuoteBreakdown = {
+  netMeter: number;
+  labour: number;
+  material: number;
+  inverter: number;
+  solarPanel: number;
+  panelQuantity: number;
+  transport: number;
+  total: number;
+  rates: QuoteRates;
 };
 
 export function calculateQuote(kW: number, rates: QuoteRates): QuoteBreakdown {
@@ -30,17 +39,7 @@ export function calculateQuote(kW: number, rates: QuoteRates): QuoteBreakdown {
     netMeter + labour + material + inverter + solarPanel +
     (rates.includeTransport ? transport : 0);
 
-  return {
-    netMeter,
-    labour,
-    material,
-    inverter,
-    solarPanel,
-    panelQuantity,
-    transport,
-    total,
-    rates,
-  };
+  return { netMeter, labour, material, inverter, solarPanel, panelQuantity, transport, total, rates };
 }
 
 export function formatINR(amount: number): string {

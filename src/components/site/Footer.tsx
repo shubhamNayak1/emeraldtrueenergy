@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { Mail, MapPin, Phone } from "lucide-react";
 import { Logo } from "../Logo";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { SETTINGS } from "@/content/settings";
 
 export function Footer() {
   return (
@@ -30,16 +31,15 @@ export function Footer() {
             Reach us
           </h4>
           <ul className="mt-4 space-y-3 text-sm text-ink/70">
-            <li className="flex items-start gap-2"><Phone className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" /><span>+91 XXXXX XXXXX</span></li>
-            <li className="flex items-start gap-2"><Mail className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" /><span>info@emeraldtrueenergy.in</span></li>
-            <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" /><span>Madhya Pradesh, India</span></li>
+            <li className="flex items-start gap-2"><Phone className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" /><span>{SETTINGS.publicPhone}</span></li>
+            <li className="flex items-start gap-2"><Mail className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" /><span>{SETTINGS.publicEmail}</span></li>
+            <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" /><span>{SETTINGS.address}</span></li>
           </ul>
         </div>
       </div>
       <div className="border-t border-emerald-100">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-ink/50 sm:flex-row sm:px-6">
-          <span>© {new Date().getFullYear()} Emerald True Energy. All rights reserved.</span>
-          <Link href="/admin" className="hover:text-emerald-700">Admin</Link>
+        <div className="mx-auto max-w-6xl px-4 py-5 text-center text-xs text-ink/50 sm:px-6">
+          © {new Date().getFullYear()} {SETTINGS.companyName}. All rights reserved.
         </div>
       </div>
     </footer>
