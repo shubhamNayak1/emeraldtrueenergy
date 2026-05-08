@@ -2,7 +2,6 @@ import { initializeApp, getApps, getApp, type FirebaseApp, type FirebaseOptions 
 import { getAuth, type Auth } from "firebase/auth";
 import { getFirestore, type Firestore } from "firebase/firestore";
 import { getStorage, type FirebaseStorage } from "firebase/storage";
-import { getFunctions, type Functions } from "firebase/functions";
 
 const config: FirebaseOptions = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -19,7 +18,6 @@ let _app: FirebaseApp | null = null;
 let _auth: Auth | null = null;
 let _db: Firestore | null = null;
 let _storage: FirebaseStorage | null = null;
-let _functions: Functions | null = null;
 
 function notConfiguredError(): never {
   throw new Error(
@@ -50,8 +48,5 @@ export const firebaseApp = lazy<FirebaseApp>(() => getOrInitApp());
 export const auth = lazy<Auth>(() => (_auth ??= getAuth(getOrInitApp())));
 export const db = lazy<Firestore>(() => (_db ??= getFirestore(getOrInitApp())));
 export const storage = lazy<FirebaseStorage>(() => (_storage ??= getStorage(getOrInitApp())));
-export const functions = lazy<Functions>(
-  () => (_functions ??= getFunctions(getOrInitApp(), "asia-south1")),
-);
 
 export const firebaseConfigured = isConfigured;

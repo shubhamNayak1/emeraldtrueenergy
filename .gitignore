@@ -45,8 +45,6 @@ next-env.d.ts
 firebase-debug.log*
 firestore-debug.log*
 ui-debug.log*
-functions/lib/
-functions/node_modules/
 serviceAccountKey*.json
 
 # Local seed assets (uploaded via admin)

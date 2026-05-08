@@ -3,97 +3,110 @@
 Premium solar solutions website + admin panel.
 
 - **Frontend**: Next.js 16 (App Router) + TypeScript + Tailwind CSS — deployed to Vercel
-- **Backend**: Firebase (Firestore + Storage + Auth) + 1 Cloud Function for PDF generation
-- **Region**: `asia-south1` (Mumbai)
+- **Backend services**: Firebase **Spark plan** (free) — Firestore + Storage + Auth
+- **PDF generation**: Next.js API route (`/api/quote`) running on Vercel — keeps everything on free tiers
+- **Region**: `asia-south1` (Mumbai) for Firestore + Storage
+
+> **Why no Cloud Functions?** Firebase Functions require the paid Blaze plan. This setup keeps everything on free tiers (₹0/month).
 
 ## Project layout
 
 ```
 emeraldtrueenergy/
-├── src/                      # Next.js app
-│   ├── app/                  # routes (public + /admin)
-│   ├── components/site/      # public-site UI
-│   ├── components/admin/     # admin UI
-│   └── lib/                  # firebase init, types, data, quote calc
-├── functions/                # Cloud Functions (TypeScript) → Firebase
-│   └── src/
-│       ├── index.ts          # generateQuote callable
-│       ├── pdf.ts            # PDF rendering (pdfkit)
-│       └── quote.ts          # rate × kW math
-├── firebase.json             # Firestore + Storage + Functions config
-├── firestore.rules           # security: public read, admin-only write
-├── storage.rules             # security: public read for project/review images
-├── scripts/
-│   ├── seed.mjs              # initial services / rates / settings
-│   └── grant-admin.mjs       # gives a Firebase Auth user admin claim
-└── .env.example              # frontend Firebase config
+├── src/
+│   ├── app/
+│   │   ├── (public)              # Home / Services / Projects / Contact
+│   │   ├── admin/                # Owner panel (gated by Firebase Auth admin claim)
+│   │   └── api/quote/route.ts    # POST → returns PDF + saves quote-lead to Firestore
+│   ├── components/site/          # public-site UI
+│   ├── components/admin/         # admin UI
+│   └── lib/
+│       ├── firebase.ts           # lazy SDK init
+│       ├── pdf.ts                # pdfkit branded quotation
+│       ├── quote.ts              # rate × kW math
+│       ├── data.ts               # Firestore reads
+│       ├── auth.ts               # admin-claim hook
+│       └── types.ts
+├── firebase.json                 # Firestore + Storage rules deploy config
+├── firestore.rules               # public read, admin-only write
+├── storage.rules                 # public read for project/review images
+└── scripts/
+    ├── seed.mjs                  # initial services / rates / settings
+    └── grant-admin.mjs           # gives a Firebase Auth user the admin claim
 ```
 
 ## Setup (one-time)
 
-1. **Create a Firebase project**
-   ```
-   npx firebase-tools login
-   npx firebase-tools projects:create emeraldtrueenergy
-   ```
-   In the Firebase console, enable: Firestore, Storage, Authentication (Email/Password), Functions.
+### 1 · Create a Firebase project (Spark / free plan)
+- [console.firebase.google.com](https://console.firebase.google.com) → **Add project** → name it → disable Analytics → **Create**.
+- **Stay on the Spark plan.** No credit card required.
 
-2. **Wire frontend env vars**
-   Copy `.env.example` to `.env.local` and paste values from
-   *Project Settings → General → Your apps → Web app → SDK setup & configuration*.
+### 2 · Enable services
+| Service | Where | Region |
+|---|---|---|
+| Firestore | Build → Firestore Database → Create | `asia-south1` |
+| Storage | Build → Storage → Get started | `asia-south1` |
+| Authentication | Build → Authentication → Email/Password → Enable | — |
 
-3. **Install + run dev**
-   ```
-   npm install
-   npm run dev          # http://localhost:3000
-   ```
+### 3 · Get the web SDK config
+- Project settings → "Your apps" → click `</>` web icon → register `Emerald True Energy Web` (skip hosting).
+- Copy the 6 `firebaseConfig` values.
 
-4. **Install + build the Cloud Function**
-   ```
-   cd functions && npm install && npm run build && cd ..
-   ```
+### 4 · Wire frontend env vars
+```bash
+cp .env.example .env.local
+```
+Paste the 6 values into `.env.local`.
 
-5. **Deploy security rules + the function**
-   ```
-   npx firebase-tools deploy --only firestore:rules,storage,functions
-   ```
+### 5 · Install + run dev
+```bash
+npm install
+npm run dev          # → http://localhost:3000
+```
 
-6. **Seed initial data** (services, default quote rates, site settings)
-   - Download a service-account key: *Firebase console → Project settings → Service accounts → Generate new private key*. Save it as `serviceAccountKey.json` (gitignored).
-   ```
-   GOOGLE_APPLICATION_CREDENTIALS=./serviceAccountKey.json node scripts/seed.mjs
-   ```
+### 6 · Deploy security rules to Firebase
+```bash
+npm install -g firebase-tools
+firebase login
+firebase use --add        # pick your project
+firebase deploy --only firestore:rules,firestore:indexes,storage
+```
 
-7. **Create the owner's admin account**
-   - In Firebase console → Authentication → Users → Add user (email + password).
-   - Then grant the admin claim:
-   ```
-   GOOGLE_APPLICATION_CREDENTIALS=./serviceAccountKey.json node scripts/grant-admin.mjs owner@emeraldtrueenergy.in
-   ```
-   - Owner signs in at `/admin/login`.
+### 7 · Download a service-account key (for seeding + admin grant only)
+- Project settings → **Service accounts** → **Generate new private key** → save as `serviceAccountKey.json` in repo root (gitignored).
+
+### 8 · Seed initial data (services, rates, settings)
+```bash
+GOOGLE_APPLICATION_CREDENTIALS=./serviceAccountKey.json node scripts/seed.mjs
+```
+
+### 9 · Create the owner's admin account
+- Firebase console → Authentication → Users → **Add user** (email + password).
+- Grant the admin claim:
+  ```bash
+  GOOGLE_APPLICATION_CREDENTIALS=./serviceAccountKey.json node scripts/grant-admin.mjs owner@emeraldtrueenergy.in
+  ```
 
 ## Deployment
 
 ### Frontend → Vercel
-- Connect the GitHub repo on Vercel
-- Add the same env vars from `.env.local` to the Vercel project
-- Default build settings work (Next.js auto-detected)
+1. [vercel.com](https://vercel.com) → Add Project → import the GitHub repo.
+2. Add the **same 6 `NEXT_PUBLIC_FIREBASE_*` env vars** (Production + Preview + Development).
+3. Click **Deploy**. ~2 min.
+4. Authorize the Vercel domain in Firebase: **Auth → Settings → Authorized domains** → add `<project>.vercel.app` (and your custom domain if any).
 
-### Backend → Firebase
-- `npx firebase-tools deploy --only firestore:rules,storage,functions`
+### After deploy
+- Frontend changes → push to `main` → Vercel auto-redeploys.
+- Rule changes → `firebase deploy --only firestore:rules`.
+- Content changes (services / projects / rates / WhatsApp number / hero copy) → done from `/admin`. No redeploy needed.
 
-## Day-to-day admin
-
-After deploy the owner uses `/admin` to:
-- **Dashboard** – see lead counts at a glance
-- **Inbox** – contact-form messages + quote-download leads (one-click WhatsApp reply)
-- **Services** – add/edit/hide/delete services shown on the site
-- **Projects** – upload installation photos with location + kW
-- **Reviews** – add/edit client testimonials
-- **Settings** – edit quotation pricing (any rate change immediately affects new PDFs) and site contact details
+## Day-to-day admin (`/admin`)
+- **Dashboard** – live counts of leads, quotes, services, projects, reviews
+- **Inbox** – contact-form messages and quote-download leads, with one-click WhatsApp follow-up
+- **Services / Projects / Reviews** – full CRUD with image upload
+- **Settings** – edit every quotation rate (live 5 kW preview) + owner WhatsApp/email/address/hero copy
 
 ## Quotation math (for reference)
-
 ```
 netMeter   = kW <= 5 ? 5000 : 25000
 labour     = kW × 2000
@@ -105,5 +118,4 @@ solarPanel = panelRate × panelQty
 transport  = kW × 1000
 total      = netMeter + labour + material + inverter + solarPanel + transport
 ```
-
-All factors are stored in `quoteRates/default` and editable from `/admin/settings`.
+All factors live in `quoteRates/default` and are editable from `/admin/settings` — changes take effect on the very next quote download.

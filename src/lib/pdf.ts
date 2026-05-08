@@ -1,6 +1,5 @@
 import PDFDocument from "pdfkit";
-import type { QuoteBreakdown } from "./quote";
-import { formatINR } from "./quote";
+import type { QuoteBreakdown } from "./types";
 
 type Customer = { name: string; phone: string; email?: string; type: string; kW: number };
 type Branding = { companyName: string; phone: string; email: string; address: string };
@@ -10,6 +9,10 @@ const EMERALD_DARK = "#064e3b";
 const SUN = "#f59e0b";
 const INK = "#0f1f1a";
 const SOFT = "#6b7280";
+
+function inr(n: number): string {
+  return "Rs. " + Math.round(n).toLocaleString("en-IN");
+}
 
 export async function buildQuotePdf(
   customer: Customer,
@@ -28,20 +31,19 @@ export async function buildQuotePdf(
     });
     const quoteRef = `ETE-${Date.now().toString().slice(-8)}`;
 
-    // ── HEADER BAND ───────────────────────────────────────────────────────────
+    // ── HEADER BAND ──
     doc.rect(0, 0, doc.page.width, 110).fill(EMERALD);
     doc.fillColor("white").font("Helvetica-Bold").fontSize(22).text(branding.companyName, 50, 36);
     doc.font("Helvetica").fontSize(10).fillColor("#d1fae5")
       .text("Premium Solar Solutions · Madhya Pradesh", 50, 64);
 
-    doc.fillColor("white").font("Helvetica-Bold").fontSize(13).text("QUOTATION", 0, 38, { align: "right", width: doc.page.width - 50 });
+    doc.fillColor("white").font("Helvetica-Bold").fontSize(13)
+      .text("QUOTATION", 0, 38, { align: "right", width: doc.page.width - 50 });
     doc.font("Helvetica").fontSize(9).fillColor("#d1fae5")
       .text(`Ref: ${quoteRef}`, 0, 60, { align: "right", width: doc.page.width - 50 })
       .text(`Date: ${today}`, 0, 74, { align: "right", width: doc.page.width - 50 });
 
-    doc.moveDown(2);
-
-    // ── CUSTOMER ──────────────────────────────────────────────────────────────
+    // ── CUSTOMER ──
     let y = 140;
     doc.fillColor(EMERALD_DARK).font("Helvetica-Bold").fontSize(11).text("Prepared for", 50, y);
     y += 16;
@@ -59,7 +61,7 @@ export async function buildQuotePdf(
     doc.text(`System size: ${customer.kW} kW`, 50, y);
     y += 30;
 
-    // ── BREAKDOWN TABLE ───────────────────────────────────────────────────────
+    // ── BREAKDOWN TABLE ──
     doc.fillColor(EMERALD_DARK).font("Helvetica-Bold").fontSize(12).text("System estimate", 50, y);
     y += 18;
 
@@ -68,7 +70,6 @@ export async function buildQuotePdf(
     const colAmount = doc.page.width - 50;
     const rowH = 24;
 
-    // table head
     doc.rect(45, y, doc.page.width - 90, rowH).fill("#ecfdf5");
     doc.fillColor(EMERALD_DARK).font("Helvetica-Bold").fontSize(10)
       .text("Item", colItem + 5, y + 7)
@@ -79,11 +80,11 @@ export async function buildQuotePdf(
     const r = breakdown.rates;
     const rows: Array<[string, string, number]> = [
       ["Net meter installation", customer.kW <= 5 ? "Up to 5 kW slab" : "Above 5 kW slab", breakdown.netMeter],
-      ["Labour & licensing", `${customer.kW} kW × ${formatINR(r.labourPerKW)}`, breakdown.labour],
-      ["Mounting & material", `${customer.kW} kW × ${formatINR(r.materialPerKW)}`, breakdown.material],
-      ["Inverter", `${customer.kW} kW × ${formatINR(r.inverterPerKW)}`, breakdown.inverter],
+      ["Labour & licensing", `${customer.kW} kW × ${inr(r.labourPerKW)}`, breakdown.labour],
+      ["Mounting & material", `${customer.kW} kW × ${inr(r.materialPerKW)}`, breakdown.material],
+      ["Inverter", `${customer.kW} kW × ${inr(r.inverterPerKW)}`, breakdown.inverter],
       ["Solar panels", `${breakdown.panelQuantity} × ${r.panelWattage}W mono-PERC`, breakdown.solarPanel],
-      ["Transport", `${customer.kW} kW × ${formatINR(r.transportPerKW)}${r.includeTransport ? "" : " (not in total)"}`, breakdown.transport],
+      ["Transport", `${customer.kW} kW × ${inr(r.transportPerKW)}${r.includeTransport ? "" : " (not in total)"}`, breakdown.transport],
     ];
 
     rows.forEach((row, i) => {
@@ -91,23 +92,20 @@ export async function buildQuotePdf(
       doc.fillColor(INK).font("Helvetica").fontSize(10).text(row[0], colItem + 5, y + 7);
       doc.fillColor(SOFT).fontSize(9).text(row[1], colDetail, y + 7, { width: 200 });
       doc.fillColor(INK).font("Helvetica-Bold").fontSize(10)
-        .text(formatINR(row[2]), colAmount - 80, y + 7, { width: 75, align: "right" });
+        .text(inr(row[2]), colAmount - 80, y + 7, { width: 75, align: "right" });
       y += rowH;
     });
 
-    // total band
     y += 6;
     doc.rect(45, y, doc.page.width - 90, 38).fill(EMERALD);
     doc.fillColor("white").font("Helvetica-Bold").fontSize(14)
       .text("Estimated total", colItem + 5, y + 12);
-    doc.fontSize(16).text(formatINR(breakdown.total), colAmount - 130, y + 11, { width: 125, align: "right" });
+    doc.fontSize(16).text(inr(breakdown.total), colAmount - 130, y + 11, { width: 125, align: "right" });
     y += 56;
 
-    // sun accent line
     doc.rect(45, y, doc.page.width - 90, 3).fill(SUN);
     y += 18;
 
-    // ── NOTES ─────────────────────────────────────────────────────────────────
     doc.fillColor(EMERALD_DARK).font("Helvetica-Bold").fontSize(11).text("What's included", 50, y);
     y += 16;
     const notes = [
@@ -134,7 +132,6 @@ export async function buildQuotePdf(
         50, y, { width: doc.page.width - 100 },
       );
 
-    // ── FOOTER ────────────────────────────────────────────────────────────────
     const fy = doc.page.height - 60;
     doc.rect(0, fy, doc.page.width, 60).fill("#ecfdf5");
     doc.fillColor(EMERALD_DARK).font("Helvetica-Bold").fontSize(10).text(branding.companyName, 50, fy + 14);

@@ -4,9 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { httpsCallable } from "firebase/functions";
 import { X, Loader2, Download } from "lucide-react";
-import { functions } from "@/lib/firebase";
 
 const QuoteSchema = z.object({
   kW: z.coerce.number().min(1, "Must be at least 1 kW").max(1000, "Max 1000 kW"),
@@ -36,19 +34,18 @@ export function QuoteWizard({ open, onClose }: Props) {
     setSubmitting(true);
     setError(null);
     try {
-      const callable = httpsCallable<QuoteForm, { pdfBase64: string; total: number }>(
-        functions,
-        "generateQuote",
-      );
-      const res = await callable(data);
-      const { pdfBase64 } = res.data;
+      const res = await fetch("/api/quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: res.statusText }));
+        throw new Error(err.error ?? "Could not generate quotation");
+      }
 
-      const byteChars = atob(pdfBase64);
-      const bytes = new Uint8Array(byteChars.length);
-      for (let i = 0; i < byteChars.length; i++) bytes[i] = byteChars.charCodeAt(i);
-      const blob = new Blob([bytes], { type: "application/pdf" });
+      const blob = await res.blob();
       const url = URL.createObjectURL(blob);
-
       const a = document.createElement("a");
       a.href = url;
       a.download = `EmeraldTrueEnergy-Quotation-${data.kW}kW.pdf`;
