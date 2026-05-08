@@ -7,11 +7,11 @@ export const SETTINGS = {
 
   // Owner WhatsApp number — full international format, no spaces.
   // E.g. "+919876543210". Used by the floating WhatsApp button + Contact page.
-  ownerWhatsApp: "+91XXXXXXXXXX",
+  ownerWhatsApp: "+918878643294",
 
   // Public-facing contact (display + tel: / mailto: links).
-  publicPhone: "+91 XXXXX XXXXX",
-  publicEmail: "info@emeraldtrueenergy.in",
+  publicPhone: "+91 88786 43294",
+  publicEmail: "knsenterprisespanna@gmail.com",
   address: "Madhya Pradesh, India",
 
   // Hero section copy (Home page)
