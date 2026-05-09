@@ -51,6 +51,57 @@ Edit `ownerWhatsApp` in `src/content/settings.ts` (full international format, e.
 
 Edit `QUOTE_RATES` in `src/content/settings.ts` and push. Every PDF generated after the deploy uses the new rates.
 
+## Quote-download notifications via EmailJS
+
+When a customer downloads a quotation PDF, the site can also email all the form fields + computed total to the owner. Setup is one-time, ~5 minutes.
+
+### One-time setup
+
+1. **Sign up** at [emailjs.com](https://www.emailjs.com) (free tier covers 200 emails/month).
+2. **Add a service**: Email Services → **Add New Service** → pick Gmail / Outlook / etc. → connect → copy the **Service ID** (e.g. `service_abc123`).
+3. **Create a template**: Email Templates → **Create New Template**. Set the **To Email** to the owner's address. Use the variables below in the subject/body — paste this template as a starting point:
+
+   **Subject:**
+   ```
+   New Solar Quote — {{customer_name}} ({{kw}} kW)
+   ```
+
+   **Body:**
+   ```
+   A new quotation was downloaded from emeraldtrueenergy.in.
+
+   Customer
+   --------
+   Name:  {{customer_name}}
+   Phone: {{customer_phone}}
+   Email: {{customer_email}}
+   Type:  {{installation_type}}
+   Size:  {{kw}} kW
+
+   Quoted total: {{total}}
+
+   Breakdown
+   ---------
+   Net meter:      {{net_meter}}
+   Labour:         {{labour}}
+   Material:       {{material}}
+   Inverter:       {{inverter}}
+   Solar panels:   {{solar_panels}} ({{panel_quantity}} panels)
+   Transport:      {{transport}}
+
+   Date: {{date}}
+   ```
+
+   Save → copy the **Template ID** (e.g. `template_xyz789`).
+
+4. **Get your Public Key**: Account → General → **Public Key** → copy.
+
+5. **Restrict by domain** (important): Account → Security → **Allow EmailJS API for non-browser apps** → keep OFF. Domains → add `emeraldtrueenergy.in` and `shubhamnayak1.github.io`. This stops anyone else's site from using your EmailJS quota.
+
+6. **Paste the three values** into `src/content/settings.ts` → `EMAILJS` block. Commit + push.
+
+That's it. Every quote download from now on emails you a copy. If any of the three values is empty, the email step is skipped silently — the PDF still downloads as usual.
+
 ## Deploying to GitHub Pages
 
 ### One-time setup (~2 min)

@@ -24,6 +24,28 @@ export const SETTINGS = {
 } as const;
 
 /**
+ * EmailJS — sends a notification email with the quote details every time a
+ * customer downloads a quotation PDF. The "to" address is configured inside
+ * the EmailJS template, not here.
+ *
+ * Setup (~5 min — see README "Quote-download notifications via EmailJS"):
+ *   1. Sign up at https://www.emailjs.com (free, 200 mails/month)
+ *   2. Add an email service (Gmail/Outlook) → copy its Service ID
+ *   3. Create a template using the variables listed in the README → copy Template ID
+ *   4. Account → API Keys → copy the Public Key
+ *   5. Account → Domains → restrict to emeraldtrueenergy.in + your *.github.io subdomain
+ *   6. Paste all three below, commit, push.
+ *
+ * If any of these are empty strings, the email step is skipped silently — the
+ * PDF still downloads as normal.
+ */
+export const EMAILJS = {
+  serviceId: "service_rdn8byo",
+  templateId: "template_sz574y7",
+  publicKey: "7-SoJAxtmRLJf9YtW",
+};
+
+/**
  * Quotation pricing. Edit and redeploy whenever rates change.
  *
  * Solar panel cost = panelUnitPrice × (panelsPerKW × kW)

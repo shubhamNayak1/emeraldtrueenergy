@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { X, Loader2, Download } from "lucide-react";
-import { calculateQuote } from "@/lib/quote";
-import { QUOTE_RATES, SETTINGS } from "@/content/settings";
+import { calculateQuote, formatINR } from "@/lib/quote";
+import { EMAILJS, QUOTE_RATES, SETTINGS } from "@/content/settings";
 
 type QuoteForm = {
   kW: string;
@@ -59,22 +59,25 @@ export function QuoteWizard({ open, onClose }: Props) {
 
       const breakdown = calculateQuote(Number(form.kW), QUOTE_RATES);
 
-      buildQuotePdf(
-        {
-          name: form.name.trim(),
-          phone: form.phone.trim(),
-          email: form.email.trim() || undefined,
-          type: form.type,
-          kW: Number(form.kW),
-        },
-        breakdown,
-        {
-          companyName: SETTINGS.companyName,
-          phone: SETTINGS.publicPhone,
-          email: SETTINGS.publicEmail,
-          address: SETTINGS.address,
-        },
-      );
+      const customer = {
+        name: form.name.trim(),
+        phone: form.phone.trim(),
+        email: form.email.trim() || undefined,
+        type: form.type,
+        kW: Number(form.kW),
+      };
+
+      buildQuotePdf(customer, breakdown, {
+        companyName: SETTINGS.companyName,
+        phone: SETTINGS.publicPhone,
+        email: SETTINGS.publicEmail,
+        address: SETTINGS.address,
+      });
+
+      // Fire-and-forget owner notification. PDF download is the user's primary
+      // outcome — if the email service is misconfigured or down, don't block
+      // them or surface a scary error.
+      void notifyOwner(customer, breakdown);
 
       setForm(EMPTY);
       onClose();
@@ -189,4 +192,58 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       {children}
     </label>
   );
+}
+
+type Customer = {
+  name: string;
+  phone: string;
+  email?: string;
+  type: "residential" | "commercial" | "industrial";
+  kW: number;
+};
+
+async function notifyOwner(
+  customer: Customer,
+  breakdown: ReturnType<typeof calculateQuote>,
+): Promise<void> {
+  if (!EMAILJS.serviceId || !EMAILJS.templateId || !EMAILJS.publicKey) return;
+
+  try {
+    const emailjs = (await import("@emailjs/browser")).default;
+    await emailjs.send(
+      EMAILJS.serviceId,
+      EMAILJS.templateId,
+      {
+        // Variables used by the current EmailJS template:
+        name: customer.name,
+        type: customer.type,
+        size: String(customer.kW),
+        number: customer.phone,
+        mail: customer.email || "(not provided)",
+
+        // Extra variables — ignored unless you reference them in the
+        // EmailJS template. Leaving them in so you can expand the
+        // template later without touching the code.
+        total: formatINR(breakdown.total),
+        panel_quantity: String(breakdown.panelQuantity),
+        net_meter: formatINR(breakdown.netMeter),
+        labour: formatINR(breakdown.labour),
+        material: formatINR(breakdown.material),
+        inverter: formatINR(breakdown.inverter),
+        solar_panels: formatINR(breakdown.solarPanel),
+        transport: formatINR(breakdown.transport),
+        date: new Date().toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        }),
+      },
+      { publicKey: EMAILJS.publicKey },
+    );
+  } catch (err) {
+    // Logged for diagnostics but never surfaced — the customer's PDF already
+    // downloaded successfully. Owner can re-check EmailJS dashboard if mails
+    // stop arriving.
+    console.warn("EmailJS notification failed:", err);
+  }
 }
