@@ -133,7 +133,7 @@ export function buildQuotePdf(
     ],
     [
       "Solar panels",
-      `${breakdown.panelQuantity} × ${r.panelWattage}W mono-PERC`,
+      `${breakdown.panelQuantity} × ${r.panelWattage}W mono-PERC or Top Con`,
       inr(breakdown.solarPanel),
     ],
     [
@@ -192,7 +192,7 @@ export function buildQuotePdf(
 
   const notes = [
     "Site survey and structural design",
-    "Tier-1 mono-PERC solar panels",
+    "Tier-1 mono-PERC or Top Con solar panels",
     "Branded grid-tied inverter with warranty",
     "Galvanized mounting structure",
     "DC/AC cabling, junction boxes & earthing",

@@ -5,8 +5,8 @@ export type QuoteRates = {
   materialPerKW: number;
   inverterPerKW: number;
   panelWattage: number;
-  panelRateBase: number;
-  panelMargin: number;
+  panelsPerKW: number;
+  panelUnitPrice: number;
   transportPerKW: number;
   includeTransport: boolean;
 };
@@ -29,9 +29,9 @@ export function calculateQuote(kW: number, rates: QuoteRates): QuoteBreakdown {
   const material = kW * rates.materialPerKW;
   const inverter = kW * rates.inverterPerKW;
 
-  const panelUnitRate = rates.panelRateBase * rates.panelWattage * rates.panelMargin;
-  const panelQuantity = Math.floor((kW * 1000) / rates.panelWattage);
-  const solarPanel = panelUnitRate * panelQuantity;
+  // Panels: integer count, rounded up so a non-whole kW never under-sizes.
+  const panelQuantity = Math.ceil(rates.panelsPerKW * kW);
+  const solarPanel = rates.panelUnitPrice * panelQuantity;
 
   const transport = kW * rates.transportPerKW;
 

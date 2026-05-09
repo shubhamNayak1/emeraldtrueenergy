@@ -10,7 +10,7 @@ export const SETTINGS = {
   ownerWhatsApp: "+918878643294",
 
   // Public-facing contact (display + tel: / mailto: links).
-  publicPhone: "+91 88786 43294",
+  publicPhone: "07732796147",
   publicEmail: "knsenterprisespanna@gmail.com",
   address: "Madhya Pradesh, India",
 
@@ -25,6 +25,9 @@ export const SETTINGS = {
 
 /**
  * Quotation pricing. Edit and redeploy whenever rates change.
+ *
+ * Solar panel cost = panelUnitPrice × (panelsPerKW × kW)
+ *   e.g. for 5 kW: 20,000 × (2 × 5) = 200,000
  */
 export const QUOTE_RATES = {
   netMeterUnder5kW: 5000,
@@ -33,8 +36,8 @@ export const QUOTE_RATES = {
   materialPerKW: 8000,
   inverterPerKW: 7000,
   panelWattage: 545,
-  panelRateBase: 15.25,
-  panelMargin: 1.05,
+  panelsPerKW: 2,
+  panelUnitPrice: 20000,
   transportPerKW: 1000,
   includeTransport: true,
 };

@@ -79,9 +79,8 @@ netMeter   = kW <= 5 ? 5000 : 25000
 labour     = kW × 2000
 material   = kW × 8000
 inverter   = kW × 7000
-panelRate  = 15.25 × 545 × 1.05      (per panel)
-panelQty   = floor(kW × 1000 / 545)
-solarPanel = panelRate × panelQty
+panelQty   = ceil(2 × kW)            (545W mono-PERC or Top Con)
+solarPanel = 20000 × panelQty
 transport  = kW × 1000
 total      = netMeter + labour + material + inverter + solarPanel + transport
 ```
