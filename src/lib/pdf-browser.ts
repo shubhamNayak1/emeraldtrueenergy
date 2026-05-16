@@ -109,32 +109,26 @@ export function buildQuotePdf(
   doc.text("System estimate", 50, y);
   y += 6;
 
-  const r = breakdown.rates;
-  const installationCharges =
-    breakdown.netMeter +
-    breakdown.labour +
-    (r.includeTransport ? breakdown.transport : 0);
-
   const rows: Array<[string, string, string]> = [
     [
-      "Installation charges",
-      "",
-      inr(installationCharges),
-    ],
-    [
-      "Mounting & material",
-      "GI - HOT Dip 3mm Machine cut",
-      inr(breakdown.material),
+      "Solar Panel",
+      `${breakdown.panelQuantity} × ${breakdown.panelWattage} Wp · ${breakdown.panelTech} ${breakdown.panelCert}`,
+      inr(breakdown.solarPanel),
     ],
     [
       "Inverter",
-      "Single / Three Phase with WiFi connectivity",
+      `${customer.kW} kW · Single / Three Phase with WiFi connectivity`,
       inr(breakdown.inverter),
     ],
     [
-      "Solar watt peak",
-      `${breakdown.panelQuantity} × ${r.panelWattage} Wp (mono-PERC or Top Con)`,
-      inr(breakdown.solarPanel),
+      "Mounting structure",
+      "GI - Hot Dip - Machine cut",
+      inr(breakdown.mounting),
+    ],
+    [
+      "Installation",
+      "Net meter, labour & transport (flat)",
+      inr(breakdown.installation),
     ],
   ];
 

@@ -48,21 +48,33 @@ export const EMAILJS = {
 /**
  * Quotation pricing. Edit and redeploy whenever rates change.
  *
- * Solar panel count = ceil(kW × 1000 / panelWattage)
- *   e.g. for 5 kW: ceil(5000 / 545) = ceil(9.17) = 10 panels
+ * The quote has 4 line items:
+ *   1. Solar Panel:    ceil(kW × 1000 / panelWattage) panels, priced per cert
+ *                      (DCR for residential / NDCR for commercial & industrial)
+ *   2. Inverter:       kW × inverterPerKW (single or three phase, WiFi-enabled)
+ *   3. Mounting:       kW × mountingPerKW (GI - Hot Dip - Machine cut)
+ *   4. Installation:   flat installationFlat (covers net meter, labour, transport)
  *
- * Solar panel cost = panelUnitPrice × panelCount
- *   e.g. for 5 kW: 20,000 × 10 = 200,000
+ * Example — 5 kW residential, 545 Wp panels:
+ *   Panels:       ceil(5000/545) = 10 × 20,000 = 200,000   (DCR)
+ *   Inverter:     5 × 7,000      =  35,000
+ *   Mounting:     5 × 8,000      =  40,000
+ *   Installation: flat           =  20,000
+ *   Total                        = 295,000
  */
 export const QUOTE_RATES = {
-  netMeterUnder5kW: 5000,
-  netMeterFiveKWPlus: 25000,
-  labourPerKW: 2000,
-  materialPerKW: 8000,
+  // Panel pricing — depends on certification, not on wattage
+  panelUnitPriceDCR: 20000,   // residential, subsidy-eligible
+  panelUnitPriceNDCR: 15000,  // commercial / industrial, no subsidy
+
+  // Per-kW rates
   inverterPerKW: 7000,
-  panelWattage: 545,
-  panelsPerKW: 1000 / 545, // 1.834... → kW × 1000 / 545
-  panelUnitPrice: 20000,
-  transportPerKW: 1000,
-  includeTransport: true,
+  mountingPerKW: 8000,
+
+  // Flat fee covering net meter, labour, and transport
+  installationFlat: 20000,
+
+  // Default panel wattage used if the form doesn't override it
+  // Common options: 545 (Bifacial), 550 (boundary), 600 (TopCon)
+  defaultPanelWattage: 545,
 };

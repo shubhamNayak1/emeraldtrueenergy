@@ -9,12 +9,26 @@ import { EMAILJS, QUOTE_RATES, SETTINGS } from "@/content/settings";
 type QuoteForm = {
   kW: string;
   type: "residential" | "commercial" | "industrial";
+  panelWattage: string; // dropdown value, parsed to number on submit
   name: string;
   phone: string;
   email: string;
 };
 
-const EMPTY: QuoteForm = { kW: "", type: "residential", name: "", phone: "", email: "" };
+const EMPTY: QuoteForm = {
+  kW: "",
+  type: "residential",
+  panelWattage: String(QUOTE_RATES.defaultPanelWattage),
+  name: "",
+  phone: "",
+  email: "",
+};
+
+const PANEL_WATTAGE_OPTIONS = [
+  { value: "545", label: "545 Wp · Bifacial" },
+  { value: "550", label: "550 Wp · TopCon" },
+  { value: "600", label: "600 Wp · TopCon" },
+];
 
 type Props = { open: boolean; onClose: () => void };
 
@@ -57,7 +71,12 @@ export function QuoteWizard({ open, onClose }: Props) {
       // initial page load.
       const { buildQuotePdf } = await import("@/lib/pdf-browser");
 
-      const breakdown = calculateQuote(Number(form.kW), QUOTE_RATES);
+      const breakdown = calculateQuote(
+        Number(form.kW),
+        Number(form.panelWattage) || QUOTE_RATES.defaultPanelWattage,
+        form.type,
+        QUOTE_RATES,
+      );
 
       const customer = {
         name: form.name.trim(),
@@ -123,9 +142,17 @@ export function QuoteWizard({ open, onClose }: Props) {
 
           <Field label="Installation type">
             <select value={form.type} onChange={(e) => set("type", e.target.value as QuoteForm["type"])} className="qw-input">
-              <option value="residential">Residential</option>
-              <option value="commercial">Commercial</option>
-              <option value="industrial">Industrial</option>
+              <option value="residential">Residential (DCR · subsidy-eligible)</option>
+              <option value="commercial">Commercial (NDCR)</option>
+              <option value="industrial">Industrial (NDCR)</option>
+            </select>
+          </Field>
+
+          <Field label="Panel wattage">
+            <select value={form.panelWattage} onChange={(e) => set("panelWattage", e.target.value)} className="qw-input">
+              {PANEL_WATTAGE_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
             </select>
           </Field>
 
@@ -222,16 +249,17 @@ async function notifyOwner(
         mail: customer.email || "(not provided)",
 
         // Extra variables — ignored unless you reference them in the
-        // EmailJS template. Leaving them in so you can expand the
-        // template later without touching the code.
+        // EmailJS template. Add them to your template body to surface
+        // more detail in the notification email.
         total: formatINR(breakdown.total),
         panel_quantity: String(breakdown.panelQuantity),
-        net_meter: formatINR(breakdown.netMeter),
-        labour: formatINR(breakdown.labour),
-        material: formatINR(breakdown.material),
-        inverter: formatINR(breakdown.inverter),
-        solar_panels: formatINR(breakdown.solarPanel),
-        transport: formatINR(breakdown.transport),
+        panel_wattage: `${breakdown.panelWattage} Wp`,
+        panel_tech: breakdown.panelTech,
+        panel_cert: breakdown.panelCert,
+        solar_panel_cost: formatINR(breakdown.solarPanel),
+        inverter_cost: formatINR(breakdown.inverter),
+        mounting_cost: formatINR(breakdown.mounting),
+        installation_cost: formatINR(breakdown.installation),
         date: new Date().toLocaleDateString("en-IN", {
           day: "2-digit",
           month: "long",
