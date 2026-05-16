@@ -2,7 +2,11 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { ContactWhatsAppButton } from "@/components/site/ContactWhatsAppButton";
 import { SETTINGS } from "@/content/settings";
 
-export const metadata = { title: "Contact" };
+export const metadata = {
+  title: "Contact Us",
+  description:
+    "Talk to Emerald True Energy about rooftop solar for your home or business in Madhya Pradesh. Reach us on WhatsApp, phone, or email.",
+};
 
 export default function ContactPage() {
   return (

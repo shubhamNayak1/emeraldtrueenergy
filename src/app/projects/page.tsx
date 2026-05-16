@@ -1,6 +1,10 @@
 import { PROJECTS } from "@/content/projects";
 
-export const metadata = { title: "Projects" };
+export const metadata = {
+  title: "Solar Projects",
+  description:
+    "Rooftop solar installations completed by Emerald True Energy across Khurai, Panna, Pawai, Damoh, Hatta and Bina in Madhya Pradesh.",
+};
 
 export default function ProjectsPage() {
   return (

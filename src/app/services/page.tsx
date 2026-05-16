@@ -1,7 +1,11 @@
 import { Sun } from "lucide-react";
 import { SERVICES } from "@/content/services";
 
-export const metadata = { title: "Services" };
+export const metadata = {
+  title: "Solar Services",
+  description:
+    "Residential, commercial and industrial rooftop solar — on-grid, off-grid with battery, solar water pumps, AMC, and net-meter assistance across Madhya Pradesh.",
+};
 
 export default function ServicesPage() {
   return (

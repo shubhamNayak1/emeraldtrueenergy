@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppFab } from "@/components/site/WhatsAppFab";
+import { SETTINGS } from "@/content/settings";
 
 const display = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -39,10 +40,40 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+// LocalBusiness structured data — tells Google this is a real local business,
+// which is the single most important on-page SEO signal for service businesses.
+// Makes the site eligible for the "map pack" rich result on local searches.
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: SETTINGS.companyName,
+  description:
+    "Rooftop solar installations across Madhya Pradesh — residential, commercial and industrial systems with full-service support.",
+  url: "https://emeraldtrueenergy.in",
+  telephone: SETTINGS.publicPhone,
+  email: SETTINGS.publicEmail,
+  image: "https://emeraldtrueenergy.in/projects/khurai.jpeg",
+  priceRange: "₹₹",
+  address: {
+    "@type": "PostalAddress",
+    addressRegion: "Madhya Pradesh",
+    addressCountry: "IN",
+  },
+  areaServed: [
+    "Khurai", "Panna", "Pawai", "Damoh", "Hatta", "Bina", "Madhya Pradesh",
+  ],
+  sameAs: ["https://emeraldtrueenergy.in"],
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${display.variable} ${sans.variable}`}>
       <body className="min-h-screen bg-cream text-ink antialiased" suppressHydrationWarning>
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        />
         <Header />
         <main>{children}</main>
         <Footer />
