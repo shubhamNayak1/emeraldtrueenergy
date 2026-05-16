@@ -48,8 +48,11 @@ export const EMAILJS = {
 /**
  * Quotation pricing. Edit and redeploy whenever rates change.
  *
- * Solar panel cost = panelUnitPrice × (panelsPerKW × kW)
- *   e.g. for 5 kW: 20,000 × (2 × 5) = 200,000
+ * Solar panel count = ceil(kW × 1000 / panelWattage)
+ *   e.g. for 5 kW: ceil(5000 / 545) = ceil(9.17) = 10 panels
+ *
+ * Solar panel cost = panelUnitPrice × panelCount
+ *   e.g. for 5 kW: 20,000 × 10 = 200,000
  */
 export const QUOTE_RATES = {
   netMeterUnder5kW: 5000,
@@ -58,7 +61,7 @@ export const QUOTE_RATES = {
   materialPerKW: 8000,
   inverterPerKW: 7000,
   panelWattage: 545,
-  panelsPerKW: 2,
+  panelsPerKW: 1000 / 545, // 1.834... → kW × 1000 / 545
   panelUnitPrice: 20000,
   transportPerKW: 1000,
   includeTransport: true,
