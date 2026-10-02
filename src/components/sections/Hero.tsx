@@ -34,7 +34,8 @@ export function Hero() {
       </div>
 
       <div className="relative mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.1fr_1fr] md:py-16">
-        <div className="relative z-10"><!-- text sits above the artwork on mobile -->
+        {/* Text sits above the artwork on mobile (artwork is absolute backdrop below). */}
+        <div className="relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
