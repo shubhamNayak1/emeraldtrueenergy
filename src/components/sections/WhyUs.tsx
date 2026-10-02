@@ -68,19 +68,19 @@ function PromiseCard({ promise }: { promise: Promise }) {
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="relative flex h-full w-full flex-col items-start p-4 text-left sm:cursor-default sm:p-7"
+        className="relative flex h-full w-full flex-col items-start p-3 text-left sm:cursor-default sm:p-7"
       >
-        <div className="flex w-full items-start gap-3 sm:gap-5">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-md shadow-emerald-500/30 sm:h-14 sm:w-14 sm:rounded-2xl sm:shadow-lg">
-            <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
+        <div className="flex w-full items-start gap-2 sm:gap-5">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-md shadow-emerald-500/30 sm:h-14 sm:w-14 sm:rounded-2xl sm:shadow-lg">
+            <Icon className="h-4 w-4 sm:h-6 sm:w-6" />
           </div>
-          <div className="flex min-w-0 flex-1 items-start justify-between gap-2">
-            <h3 className="text-sm font-semibold leading-tight text-emerald-900 sm:text-lg">
+          <div className="flex min-w-0 flex-1 items-start gap-1.5 sm:gap-2">
+            <h3 className="min-w-0 flex-1 break-words text-[13px] font-semibold leading-tight text-emerald-900 sm:text-lg">
               {promise.title}
             </h3>
             <ChevronDown
               aria-hidden
-              className={`h-4 w-4 shrink-0 text-emerald-700 transition-transform sm:hidden ${open ? "rotate-180" : ""}`}
+              className={`mt-0.5 h-4 w-4 shrink-0 text-emerald-700 transition-transform sm:hidden ${open ? "rotate-180" : ""}`}
             />
           </div>
         </div>
