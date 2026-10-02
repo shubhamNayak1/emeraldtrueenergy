@@ -9,7 +9,7 @@ const ICONS = [Sun, Battery, Factory, Droplets, Wrench, FileCheck];
 
 export function Services() {
   return (
-    <section id="services" className="scroll-mt-20 py-16 sm:py-20">
+    <section id="services" className="scroll-mt-20 pt-16 pb-10 sm:pt-20 sm:pb-12">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Reveal>
           <div className="text-center">

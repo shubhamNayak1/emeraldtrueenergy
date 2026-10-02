@@ -23,7 +23,7 @@ export function Projects() {
   );
 
   return (
-    <section id="projects" className="scroll-mt-20 bg-gradient-to-b from-emerald-50/40 via-emerald-50/20 to-cream py-16 sm:py-20">
+    <section id="projects" className="scroll-mt-20 bg-gradient-to-b from-emerald-50/40 via-emerald-50/20 to-cream pt-6 pb-16 sm:pt-8 sm:pb-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Reveal>
           <div className="text-center">
