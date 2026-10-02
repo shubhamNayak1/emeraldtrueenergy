@@ -42,7 +42,7 @@ export function Logo({ className, showWordmark = true }: Props) {
         </g>
       </svg>
       {showWordmark && (
-        <span className="font-display text-lg font-semibold tracking-tight text-emerald-800 leading-none">
+        <span className="hidden font-display text-lg font-semibold leading-none tracking-tight text-emerald-800 sm:inline">
           Emerald<span className="text-sun-500">True</span>Energy
         </span>
       )}
