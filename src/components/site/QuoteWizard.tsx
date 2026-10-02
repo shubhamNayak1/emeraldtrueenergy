@@ -185,7 +185,7 @@ export function QuoteWizard({ open, onClose }: Props) {
             )}
           </button>
           <p className="text-center text-xs text-ink/50">
-            The PDF generates in your browser — no data is sent anywhere.
+            Your details are shared with our team so we can follow up — the PDF downloads instantly.
           </p>
         </form>
       </div>

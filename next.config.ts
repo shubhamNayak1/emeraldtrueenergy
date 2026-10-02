@@ -11,12 +11,14 @@ import type { NextConfig } from "next";
  *   so we don't hardcode it here.
  * - `images.unoptimized` is required because Next's image optimizer needs a
  *   server runtime, which we don't have on Pages.
- * - `trailingSlash` makes Next emit `route/index.html` so static hosts route
- *   `/services` → `/services/index.html` correctly.
+ * - `trailingSlash` is intentionally omitted (defaults to false). The GitHub
+ *   Pages runtime serves `/services` via `services.html` at the root; adding
+ *   trailingSlash would move the file to `services/index.html` and the live
+ *   URL `/services/` returns 404 on Pages' current configuration. Sitemap and
+ *   internal links use no-slash URLs to match.
  */
 const nextConfig: NextConfig = {
   output: "export",
-  trailingSlash: true,
   images: { unoptimized: true },
 };
 

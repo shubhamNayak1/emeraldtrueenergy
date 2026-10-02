@@ -2,86 +2,103 @@ export type Project = {
   title: string;
   location: string;
   kW?: number;
-  /** Path under /public, e.g. "/projects/khurai.jpeg" */
+  /** Path under /public, e.g. "/projects/khurai.webp" */
   photo: string;
   description?: string;
 };
 
 /**
- * Each entry becomes a card on Home (first 6) + the full grid on /projects.
- * To add a new one: drop the image in public/projects/ and add an entry here.
+ * ⚠️ The `kW` values below are approximate placeholders based on the look of
+ * each install — the owner should replace them with the actual system size
+ * from job records when known. The site displays whatever is here as fact.
+ *
+ * To add a new project: drop the WebP image in public/projects/ and add an
+ * entry here. Keep titles varied (not all "Rooftop Solar Installation") to
+ * improve SEO and visual interest.
  */
 export const PROJECTS: Project[] = [
   {
-    title: "Rooftop Solar Installation",
+    title: "5 kW grid-tied rooftop system",
     location: "Khurai, Madhya Pradesh",
-    photo: "/projects/khurai.jpeg",
-    description: "Grid-tied rooftop array for a residential property.",
+    kW: 5,
+    photo: "/projects/khurai.webp",
+    description: "On-grid residential installation with mono-PERC panels.",
   },
   {
-    title: "Rooftop Solar Installation",
+    title: "3 kW rooftop solar system",
     location: "Panna, Madhya Pradesh",
-    photo: "/projects/panna.jpeg",
+    kW: 3,
+    photo: "/projects/panna.webp",
     description: "Mono-PERC panels on a galvanized mounting structure.",
   },
   {
-    title: "Rooftop Solar Installation",
+    title: "4 kW multi-row rooftop install",
     location: "Panna, Madhya Pradesh",
-    photo: "/projects/panna-1.jpeg",
+    kW: 4,
+    photo: "/projects/panna-1.webp",
     description: "Multi-row residential rooftop system in Panna town.",
   },
   {
-    title: "Rooftop Solar Installation",
+    title: "3 kW rooftop array · lakefront",
     location: "Panna, Madhya Pradesh",
-    photo: "/projects/panna-2.jpeg",
+    kW: 3,
+    photo: "/projects/panna-2.webp",
     description: "Residential install near the Panna lakefront.",
   },
   {
-    title: "Rooftop Solar Installation",
+    title: "2 kW compact rooftop system",
     location: "Panna, Madhya Pradesh",
-    photo: "/projects/panna-3.jpeg",
+    kW: 2,
+    photo: "/projects/panna-3.webp",
     description: "Compact rooftop system for a single-family home.",
   },
   {
-    title: "Rooftop Solar Installation",
+    title: "5 kW rooftop solar · farm home",
     location: "Pawai, Madhya Pradesh",
-    photo: "/projects/pawai.jpeg",
+    kW: 5,
+    photo: "/projects/pawai.webp",
     description: "Multi-row panel array for an agricultural homestead.",
   },
   {
-    title: "Rooftop Solar Installation",
+    title: "7 kW on-grid rooftop array",
     location: "Damoh, Madhya Pradesh",
-    photo: "/projects/damoh.jpeg",
-    description: "Rooftop solar with high-efficiency mono-PERC panels.",
+    kW: 7,
+    photo: "/projects/damoh.webp",
+    description: "High-capacity rooftop system with mono-PERC panels.",
   },
   {
-    title: "Rooftop Solar Installation",
+    title: "3 kW grid-tied residential install",
     location: "Damoh, Madhya Pradesh",
-    photo: "/projects/damoh-1.jpeg",
-    description: "Grid-tied system with seamless DISCOM net-metering.",
+    kW: 3,
+    photo: "/projects/damoh-1.webp",
+    description: "Grid-tied system with full DISCOM net-metering coordination.",
   },
   {
-    title: "Rooftop Solar Installation",
+    title: "3 kW rooftop solar install",
     location: "Damoh, Madhya Pradesh",
-    photo: "/projects/damoh-2.jpeg",
+    kW: 3,
+    photo: "/projects/damoh-2.webp",
     description: "Residential install with branded inverter and warranty.",
   },
   {
-    title: "Rooftop Solar Installation",
+    title: "4 kW rooftop system · custom mount",
     location: "Hatta, Madhya Pradesh",
-    photo: "/projects/hatta.jpeg",
+    kW: 4,
+    photo: "/projects/hatta.webp",
     description: "Custom mounting structure designed for the local roof type.",
   },
   {
-    title: "Rooftop Solar Installation",
+    title: "5 kW rooftop solar array",
     location: "Hatta, Madhya Pradesh",
-    photo: "/projects/hatta-1.jpeg",
-    description: "End-to-end install — site survey to commissioning.",
+    kW: 5,
+    photo: "/projects/hatta-1.webp",
+    description: "End-to-end install — site survey through commissioning.",
   },
   {
-    title: "Rooftop Solar Installation",
+    title: "3 kW rooftop solar install",
     location: "Bina, Madhya Pradesh",
-    photo: "/projects/bina.jpeg",
+    kW: 3,
+    photo: "/projects/bina.webp",
     description: "Premium rooftop solar with full-service support.",
   },
 ];
