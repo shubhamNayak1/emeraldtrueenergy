@@ -23,7 +23,7 @@ export function Projects() {
   );
 
   return (
-    <section id="projects" className="scroll-mt-20 bg-gradient-to-b from-emerald-50/40 via-emerald-50/20 to-cream py-24 sm:py-28">
+    <section id="projects" className="scroll-mt-20 bg-gradient-to-b from-emerald-50/40 via-emerald-50/20 to-cream py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Reveal>
           <div className="text-center">
@@ -40,7 +40,7 @@ export function Projects() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div className="mt-10 flex flex-wrap justify-center gap-2">
+          <div className="mt-7 flex flex-wrap justify-center gap-2">
             {cities.map((c) => {
               const active = c === filter;
               return (
@@ -62,7 +62,7 @@ export function Projects() {
 
         <motion.div
           layout
-          className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+          className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
         >
           <AnimatePresence mode="popLayout">
             {visible.map((p, i) => (

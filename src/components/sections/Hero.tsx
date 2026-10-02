@@ -9,7 +9,7 @@ export function Hero() {
   const reduce = useReducedMotion();
 
   return (
-    <section className="relative isolate flex min-h-[92vh] items-center overflow-hidden">
+    <section className="relative isolate flex min-h-[78vh] items-center overflow-hidden">
       {/* Animated gradient blobs — pure CSS, GPU-accelerated. */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-cream to-sun-50" />
@@ -33,7 +33,7 @@ export function Hero() {
         />
       </div>
 
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-4 py-16 sm:px-6 md:grid-cols-[1.1fr_1fr] md:py-24">
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.1fr_1fr] md:py-16">
         <div>
           <motion.div
             initial={{ opacity: 0, y: 12 }}

@@ -28,7 +28,7 @@ const PROPS = [
 
 export function WhyUs() {
   return (
-    <section className="py-24 sm:py-28">
+    <section className="py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Reveal>
           <div className="text-center">
@@ -41,7 +41,7 @@ export function WhyUs() {
           </div>
         </Reveal>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2">
+        <div className="mt-10 grid gap-5 sm:grid-cols-2">
           {PROPS.map((p, i) => (
             <Reveal key={p.title} delay={(i % 2) * 0.1}>
               <div className="group relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 transition-shadow hover:shadow-lg hover:shadow-emerald-900/5">

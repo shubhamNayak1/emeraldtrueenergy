@@ -14,7 +14,7 @@ export function Contact() {
   const waConfigured = SETTINGS.ownerWhatsApp && !SETTINGS.ownerWhatsApp.includes("XXXX");
 
   return (
-    <section id="contact" className="scroll-mt-20 py-24 sm:py-28">
+    <section id="contact" className="scroll-mt-20 py-16 sm:py-20">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <Reveal>
           <div className="text-center">
@@ -30,7 +30,7 @@ export function Contact() {
           </div>
         </Reveal>
 
-        <div className="mt-14 space-y-4">
+        <div className="mt-10 space-y-4">
           <Reveal>
             {waConfigured ? (
               <motion.a

@@ -7,10 +7,10 @@ import { Reveal } from "@/components/motion/Reveal";
 
 export function CTA() {
   return (
-    <section className="py-20 sm:py-24">
+    <section className="py-14 sm:py-16">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <Reveal>
-          <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-emerald-700 via-emerald-600 to-emerald-800 px-8 py-16 text-center text-white shadow-2xl shadow-emerald-900/20 sm:px-12">
+          <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-emerald-700 via-emerald-600 to-emerald-800 px-8 py-12 text-center text-white shadow-2xl shadow-emerald-900/20 sm:px-12">
             {/* Decorative orbs */}
             <motion.div
               aria-hidden

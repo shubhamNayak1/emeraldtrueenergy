@@ -9,7 +9,7 @@ const ICONS = [Sun, Battery, Factory, Droplets, Wrench, FileCheck];
 
 export function Services() {
   return (
-    <section id="services" className="scroll-mt-20 py-24 sm:py-28">
+    <section id="services" className="scroll-mt-20 py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Reveal>
           <div className="text-center">
@@ -26,7 +26,7 @@ export function Services() {
           </div>
         </Reveal>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s, i) => {
             const Icon = ICONS[i % ICONS.length];
             return (

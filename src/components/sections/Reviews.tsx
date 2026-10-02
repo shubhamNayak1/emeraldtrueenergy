@@ -7,7 +7,7 @@ export function Reviews() {
   if (REVIEWS.length === 0) return null;
 
   return (
-    <section className="bg-emerald-50/40 py-24 sm:py-28">
+    <section className="bg-emerald-50/40 py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Reveal>
           <div className="text-center">
@@ -20,7 +20,7 @@ export function Reviews() {
           </div>
         </Reveal>
 
-        <div className="mt-14 grid gap-5 md:grid-cols-3">
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
           {REVIEWS.slice(0, 6).map((r, i) => (
             <Reveal key={`${r.clientName}-${i}`} delay={(i % 3) * 0.1}>
               <figure className="group relative h-full rounded-2xl border border-emerald-100 bg-white p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-900/5">
