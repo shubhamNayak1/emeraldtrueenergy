@@ -31,6 +31,12 @@ const PROPS: Promise[] = [
 ];
 
 export function WhyUs() {
+  // Single shared state across all four cards. When any one is tapped on
+  // mobile, every card expands together — otherwise the row-mate card
+  // would stretch to match the open card's height but show no content,
+  // leaving an awkward empty box.
+  const [open, setOpen] = useState(false);
+
   return (
     <section className="pt-6 pb-10 sm:pt-8 sm:pb-12">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -48,7 +54,11 @@ export function WhyUs() {
         <div className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:gap-5">
           {PROPS.map((p, i) => (
             <Reveal key={p.title} delay={(i % 2) * 0.1} className="h-full">
-              <PromiseCard promise={p} />
+              <PromiseCard
+                promise={p}
+                open={open}
+                onToggle={() => setOpen((v) => !v)}
+              />
             </Reveal>
           ))}
         </div>
@@ -57,8 +67,15 @@ export function WhyUs() {
   );
 }
 
-function PromiseCard({ promise }: { promise: Promise }) {
-  const [open, setOpen] = useState(false);
+function PromiseCard({
+  promise,
+  open,
+  onToggle,
+}: {
+  promise: Promise;
+  open: boolean;
+  onToggle: () => void;
+}) {
   const Icon = promise.icon;
 
   return (
@@ -66,7 +83,7 @@ function PromiseCard({ promise }: { promise: Promise }) {
       <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-emerald-50 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
       <button
         type="button"
-        onClick={() => setOpen((o) => !o)}
+        onClick={onToggle}
         aria-expanded={open}
         className="relative flex h-full w-full flex-col items-start p-3 text-left sm:cursor-default sm:p-7"
       >
