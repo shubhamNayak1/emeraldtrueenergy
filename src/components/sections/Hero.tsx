@@ -33,8 +33,8 @@ export function Hero() {
         />
       </div>
 
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.1fr_1fr] md:py-16">
-        <div>
+      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.1fr_1fr] md:py-16">
+        <div className="relative z-10"><!-- text sits above the artwork on mobile -->
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -99,12 +99,20 @@ export function Hero() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
+          initial={{ scale: 0.95, y: 20 }}
+          animate={{ scale: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
-          className="relative mx-auto w-full max-w-md"
+          /*
+           * Mobile: positioned absolutely BEHIND the text at low opacity so
+           *         the artwork acts as a background illustration.
+           * Desktop (md+): static grid column, full opacity, next to the
+           *                text as before.
+           */
+          className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-15 sm:opacity-20 md:pointer-events-auto md:static md:z-auto md:mx-auto md:w-full md:max-w-md md:items-stretch md:justify-center md:opacity-100"
         >
-          <SolarArtwork />
+          <div className="aspect-square w-72 max-w-full sm:w-96 md:w-full">
+            <SolarArtwork />
+          </div>
         </motion.div>
       </div>
 
