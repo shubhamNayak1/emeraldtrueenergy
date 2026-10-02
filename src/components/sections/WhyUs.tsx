@@ -43,8 +43,8 @@ export function WhyUs() {
 
         <div className="mt-10 grid gap-5 sm:grid-cols-2">
           {PROPS.map((p, i) => (
-            <Reveal key={p.title} delay={(i % 2) * 0.1}>
-              <div className="group relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 transition-shadow hover:shadow-lg hover:shadow-emerald-900/5">
+            <Reveal key={p.title} delay={(i % 2) * 0.1} className="h-full">
+              <div className="group relative h-full overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 transition-shadow hover:shadow-lg hover:shadow-emerald-900/5">
                 <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-emerald-50 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
                 <div className="relative flex gap-5">
                   <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-lg shadow-emerald-500/30">

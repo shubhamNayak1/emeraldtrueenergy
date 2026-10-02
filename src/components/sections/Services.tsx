@@ -30,11 +30,11 @@ export function Services() {
           {SERVICES.map((s, i) => {
             const Icon = ICONS[i % ICONS.length];
             return (
-              <Reveal key={s.title} delay={(i % 3) * 0.08}>
+              <Reveal key={s.title} delay={(i % 3) * 0.08} className="h-full">
                 <motion.article
                   whileHover={{ y: -6 }}
                   transition={{ type: "spring", stiffness: 320, damping: 22 }}
-                  className="group relative overflow-hidden rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm transition-shadow hover:shadow-xl hover:shadow-emerald-900/5"
+                  className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm transition-shadow hover:shadow-xl hover:shadow-emerald-900/5"
                 >
                   <div className="absolute right-0 top-0 h-32 w-32 translate-x-10 -translate-y-10 rounded-full bg-emerald-50 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
                   <div className="relative">

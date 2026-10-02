@@ -22,8 +22,8 @@ export function Reviews() {
 
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {REVIEWS.slice(0, 6).map((r, i) => (
-            <Reveal key={`${r.clientName}-${i}`} delay={(i % 3) * 0.1}>
-              <figure className="group relative h-full rounded-2xl border border-emerald-100 bg-white p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-900/5">
+            <Reveal key={`${r.clientName}-${i}`} delay={(i % 3) * 0.1} className="h-full">
+              <figure className="group relative flex h-full flex-col rounded-2xl border border-emerald-100 bg-white p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-emerald-900/5">
                 <div className="mb-3 flex gap-0.5 text-sun-500">
                   {Array.from({ length: r.stars }).map((_, k) => (
                     <Star key={k} />
