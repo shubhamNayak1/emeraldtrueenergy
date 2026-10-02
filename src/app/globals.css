@@ -34,6 +34,11 @@
 
 html {
   scroll-behavior: smooth;
+  /* Prevent accidental horizontal scrolling from any long unbreakable
+     string overflowing its container. Safer than overflow-x: hidden
+     because it doesn't create a new scroll container (which would
+     break the sticky header). */
+  overflow-x: clip;
 }
 
 body {

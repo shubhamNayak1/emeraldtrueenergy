@@ -33,15 +33,15 @@ export function Footer() {
           <ul className="mt-4 space-y-3 text-sm text-ink/70">
             <li className="flex items-start gap-2">
               <Phone className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
-              <span>{SETTINGS.publicPhone}</span>
+              <span className="min-w-0 break-all">{SETTINGS.publicPhone}</span>
             </li>
             <li className="flex items-start gap-2">
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
-              <span>{SETTINGS.publicEmail}</span>
+              <span className="min-w-0 break-all">{SETTINGS.publicEmail}</span>
             </li>
             <li className="flex items-start gap-2">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
-              <span>{SETTINGS.address}</span>
+              <span className="min-w-0 break-words">{SETTINGS.address}</span>
             </li>
           </ul>
         </div>

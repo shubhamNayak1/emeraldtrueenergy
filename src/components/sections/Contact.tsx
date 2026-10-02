@@ -121,7 +121,7 @@ function ContactCard({
       </div>
       <div className="min-w-0 flex-1">
         <div className="text-xs font-semibold uppercase tracking-wider text-emerald-800">{label}</div>
-        <div className="truncate text-base font-bold text-ink">{detail}</div>
+        <div className="break-all text-base font-bold text-ink">{detail}</div>
       </div>
     </motion.a>
   );
