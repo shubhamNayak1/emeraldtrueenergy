@@ -28,7 +28,7 @@ const PROPS = [
 
 export function WhyUs() {
   return (
-    <section className="py-16 sm:py-20">
+    <section className="pt-6 pb-10 sm:pt-8 sm:pb-12">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Reveal>
           <div className="text-center">

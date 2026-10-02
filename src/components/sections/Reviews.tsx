@@ -7,7 +7,7 @@ export function Reviews() {
   if (REVIEWS.length === 0) return null;
 
   return (
-    <section className="bg-emerald-50/40 py-16 sm:py-20">
+    <section className="bg-emerald-50/40 pt-6 pb-10 sm:pt-8 sm:pb-12">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Reveal>
           <div className="text-center">
