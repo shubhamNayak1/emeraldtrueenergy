@@ -1,9 +1,13 @@
 "use client";
 
-import { ShieldCheck, Users, HeadphonesIcon, Leaf } from "lucide-react";
+import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { ChevronDown, HeadphonesIcon, Leaf, ShieldCheck, Users, type LucideIcon } from "lucide-react";
 import { Reveal } from "@/components/motion/Reveal";
 
-const PROPS = [
+type Promise = { icon: LucideIcon; title: string; body: string };
+
+const PROPS: Promise[] = [
   {
     icon: ShieldCheck,
     title: "Tier-1 components only",
@@ -35,31 +39,73 @@ export function WhyUs() {
             <span className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
               Why Emerald True Energy
             </span>
-            <h2 className="mt-3 text-4xl font-bold text-emerald-900 sm:text-5xl">
+            <h2 className="mt-3 text-3xl font-bold text-emerald-900 sm:text-5xl">
               Built on four promises
             </h2>
           </div>
         </Reveal>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:gap-5">
           {PROPS.map((p, i) => (
             <Reveal key={p.title} delay={(i % 2) * 0.1} className="h-full">
-              <div className="group relative h-full overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 transition-shadow hover:shadow-lg hover:shadow-emerald-900/5">
-                <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-emerald-50 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
-                <div className="relative flex gap-5">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-lg shadow-emerald-500/30">
-                    <p.icon className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-emerald-900">{p.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-ink/65">{p.body}</p>
-                  </div>
-                </div>
-              </div>
+              <PromiseCard promise={p} />
             </Reveal>
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function PromiseCard({ promise }: { promise: Promise }) {
+  const [open, setOpen] = useState(false);
+  const Icon = promise.icon;
+
+  return (
+    <div className="group relative h-full overflow-hidden rounded-2xl border border-emerald-100 bg-white transition-shadow hover:shadow-lg hover:shadow-emerald-900/5 sm:rounded-3xl">
+      <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-emerald-50 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="relative flex h-full w-full flex-col items-start p-4 text-left sm:cursor-default sm:p-7"
+      >
+        <div className="flex w-full items-start gap-3 sm:gap-5">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-md shadow-emerald-500/30 sm:h-14 sm:w-14 sm:rounded-2xl sm:shadow-lg">
+            <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
+          </div>
+          <div className="flex min-w-0 flex-1 items-start justify-between gap-2">
+            <h3 className="text-sm font-semibold leading-tight text-emerald-900 sm:text-lg">
+              {promise.title}
+            </h3>
+            <ChevronDown
+              aria-hidden
+              className={`h-4 w-4 shrink-0 text-emerald-700 transition-transform sm:hidden ${open ? "rotate-180" : ""}`}
+            />
+          </div>
+        </div>
+
+        {/* Mobile: expand/collapse. Desktop: always visible. */}
+        <div className="sm:mt-2 sm:w-full">
+          <AnimatePresence initial={false}>
+            {open && (
+              <motion.p
+                key="body-mobile"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="overflow-hidden text-xs leading-relaxed text-ink/65 sm:hidden"
+              >
+                <span className="block pt-3">{promise.body}</span>
+              </motion.p>
+            )}
+          </AnimatePresence>
+          <p className="hidden text-sm leading-relaxed text-ink/65 sm:block">
+            {promise.body}
+          </p>
+        </div>
+      </button>
+    </div>
   );
 }

@@ -6,8 +6,8 @@ import { SETTINGS } from "@/content/settings";
 export function Footer() {
   return (
     <footer className="border-t border-emerald-100 bg-white">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:px-6 md:grid-cols-4">
-        <div className="md:col-span-2">
+      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-8 px-4 py-10 sm:gap-x-10 sm:gap-y-10 sm:px-6 md:grid-cols-4">
+        <div className="col-span-2">
           <Logo />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-ink/65">
             Premium rooftop solar installations across Madhya Pradesh.
