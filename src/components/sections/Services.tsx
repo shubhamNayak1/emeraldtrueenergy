@@ -16,10 +16,10 @@ export function Services() {
             <span className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
               What we do
             </span>
-            <h2 className="mt-3 text-4xl font-bold text-emerald-900 sm:text-5xl">
+            <h2 className="mt-3 text-3xl font-bold text-emerald-900 sm:text-4xl md:text-5xl">
               Solar solutions for every roof
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base text-ink/65">
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-ink/65 sm:mt-4 sm:text-base">
               From small homes to commercial sites, we design and install systems
               sized to your bill — with full end-to-end support.
             </p>

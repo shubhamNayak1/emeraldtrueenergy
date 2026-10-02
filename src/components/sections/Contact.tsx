@@ -21,10 +21,10 @@ export function Contact() {
             <span className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
               Get in touch
             </span>
-            <h2 className="mt-3 text-4xl font-bold text-emerald-900 sm:text-5xl">
+            <h2 className="mt-3 text-3xl font-bold text-emerald-900 sm:text-4xl md:text-5xl">
               Let's power your rooftop
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-base text-ink/65">
+            <p className="mx-auto mt-3 max-w-xl text-sm text-ink/65 sm:mt-4 sm:text-base">
               The fastest way to reach us is WhatsApp — we typically reply within an hour.
             </p>
           </div>
@@ -48,8 +48,8 @@ export function Contact() {
                   <div className="text-xs font-semibold uppercase tracking-[0.15em] opacity-90">
                     Chat on WhatsApp
                   </div>
-                  <div className="mt-1 text-xl font-bold">{SETTINGS.ownerWhatsApp}</div>
-                  <div className="mt-0.5 text-sm opacity-80">Tap to open WhatsApp</div>
+                  <div className="mt-1 text-lg font-bold sm:text-xl">{SETTINGS.ownerWhatsApp}</div>
+                  <div className="mt-0.5 text-xs opacity-80 sm:text-sm">Tap to open WhatsApp</div>
                 </div>
                 <svg className="hidden h-5 w-5 opacity-70 transition-transform group-hover:translate-x-1 sm:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12" />
@@ -91,8 +91,8 @@ export function Contact() {
                 <div className="text-xs font-semibold uppercase tracking-wider text-emerald-800">
                   Where we are
                 </div>
-                <div className="mt-0.5 text-base font-bold text-ink">{SETTINGS.address}</div>
-                <p className="mt-1 text-sm text-ink/60">
+                <div className="mt-0.5 text-sm font-bold text-ink sm:text-base">{SETTINGS.address}</div>
+                <p className="mt-1 text-xs text-ink/60 sm:text-sm">
                   Site visits across Madhya Pradesh — get in touch and we'll set one up.
                 </p>
               </div>
@@ -121,7 +121,7 @@ function ContactCard({
       </div>
       <div className="min-w-0 flex-1">
         <div className="text-xs font-semibold uppercase tracking-wider text-emerald-800">{label}</div>
-        <div className="break-all text-base font-bold text-ink">{detail}</div>
+        <div className="break-all text-sm font-bold text-ink sm:text-base">{detail}</div>
       </div>
     </motion.a>
   );

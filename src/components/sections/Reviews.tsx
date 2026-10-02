@@ -14,7 +14,7 @@ export function Reviews() {
             <span className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
               Client voices
             </span>
-            <h2 className="mt-3 text-4xl font-bold text-emerald-900 sm:text-5xl">
+            <h2 className="mt-3 text-3xl font-bold text-emerald-900 sm:text-4xl md:text-5xl">
               Trusted by homes & businesses
             </h2>
           </div>

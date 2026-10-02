@@ -45,7 +45,7 @@ export function WhyUs() {
             <span className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
               Why Emerald True Energy
             </span>
-            <h2 className="mt-3 text-3xl font-bold text-emerald-900 sm:text-5xl">
+            <h2 className="mt-3 text-3xl font-bold text-emerald-900 sm:text-4xl md:text-5xl">
               Built on four promises
             </h2>
           </div>
@@ -92,7 +92,7 @@ function PromiseCard({
             <Icon className="h-4 w-4 sm:h-6 sm:w-6" />
           </div>
           <div className="flex min-w-0 flex-1 items-start gap-1.5 sm:gap-2">
-            <h3 className="min-w-0 flex-1 break-words text-[13px] font-semibold leading-tight text-emerald-900 sm:text-lg">
+            <h3 className="min-w-0 flex-1 break-words text-sm font-semibold leading-tight text-emerald-900 sm:text-lg">
               {promise.title}
             </h3>
             <ChevronDown

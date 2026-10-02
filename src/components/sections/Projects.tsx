@@ -34,10 +34,10 @@ export function Projects() {
             <span className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
               Recent projects
             </span>
-            <h2 className="mt-3 text-4xl font-bold text-emerald-900 sm:text-5xl">
+            <h2 className="mt-3 text-3xl font-bold text-emerald-900 sm:text-4xl md:text-5xl">
               Installations across Madhya Pradesh
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base text-ink/65">
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-ink/65 sm:mt-4 sm:text-base">
               A glimpse of real rooftops we've energized — click a city to filter.
             </p>
           </div>

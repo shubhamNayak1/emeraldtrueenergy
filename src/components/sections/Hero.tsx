@@ -51,7 +51,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.08, ease: "easeOut" }}
-            className="mt-6 text-5xl font-extrabold leading-[1.05] tracking-tight text-emerald-900 sm:text-6xl md:text-7xl"
+            className="mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight text-emerald-900 sm:text-5xl md:text-7xl"
           >
             <span className="block">{SETTINGS.heroTitle1}</span>
             <span className="block text-emerald-700">{SETTINGS.heroTitle2}</span>
@@ -71,7 +71,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.25 }}
-            className="mt-6 max-w-xl text-lg leading-relaxed text-ink/70"
+            className="mt-5 max-w-xl text-base leading-relaxed text-ink/70 sm:mt-6 sm:text-lg"
           >
             {SETTINGS.heroSubtitle}
           </motion.p>
