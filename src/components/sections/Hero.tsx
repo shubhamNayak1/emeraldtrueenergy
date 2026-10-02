@@ -109,9 +109,9 @@ export function Hero() {
            * Desktop (md+): static grid column, full opacity, next to the
            *                text as before.
            */
-          className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-15 sm:opacity-20 md:pointer-events-auto md:static md:z-auto md:mx-auto md:w-full md:max-w-md md:items-stretch md:justify-center md:opacity-100"
+          className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center opacity-45 sm:opacity-50 md:pointer-events-auto md:static md:z-auto md:mx-auto md:w-full md:max-w-md md:items-stretch md:justify-center md:opacity-100"
         >
-          <div className="aspect-square w-72 max-w-full sm:w-96 md:w-full">
+          <div className="aspect-square w-80 max-w-full sm:w-[26rem] md:w-full">
             <SolarArtwork />
           </div>
         </motion.div>
