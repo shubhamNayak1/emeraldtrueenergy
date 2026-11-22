@@ -107,8 +107,8 @@ const en = {
   "common.address": "Madhya Pradesh, India",
 } as const;
 
-type Dictionary = typeof en;
-export type TKey = keyof Dictionary;
+export type TKey = keyof typeof en;
+type Dictionary = Record<TKey, string>;
 
 const hi: Dictionary = {
   // Header
