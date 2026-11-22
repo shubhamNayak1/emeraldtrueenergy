@@ -128,7 +128,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] font-medium uppercase tracking-[0.15em] text-emerald-900/60 sm:text-xs"
         >
-          <TrustDot>12+ installations</TrustDot>
+          <TrustDot>100+ installations</TrustDot>
           <TrustDot>6 cities in MP</TrustDot>
           <TrustDot>Tier-1 components</TrustDot>
         </motion.div>

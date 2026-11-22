@@ -4,8 +4,8 @@ import { Reveal } from "@/components/motion/Reveal";
 import { CountUp } from "@/components/motion/CountUp";
 
 const STATS = [
-  { value: 12,  suffix: "+",    label: "Projects completed", accent: "emerald" },
-  { value: 50,  suffix: "+ kW", label: "Installed capacity", accent: "sun"     },
+  { value: 100, suffix: "+",    label: "Projects completed", accent: "emerald" },
+  { value: 500, suffix: "+ kW", label: "Installed capacity", accent: "sun"     },
   { value: 6,   suffix: "",     label: "Cities covered",     accent: "mint"    },
   { value: 100, suffix: "%",    label: "In-house team",      accent: "emerald" },
 ] as const;
