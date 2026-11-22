@@ -58,7 +58,7 @@ export function buildQuotePdf(
   doc.setFont("helvetica", "normal");
   doc.setFontSize(10);
   doc.setTextColor(209, 250, 229);
-  doc.text("Premium Solar Solutions · Madhya Pradesh", 50, 72);
+  doc.text("Premium Solar Solutions - Madhya Pradesh", 50, 72);
 
   doc.setTextColor(255, 255, 255);
   doc.setFont("helvetica", "bold");
@@ -109,26 +109,32 @@ export function buildQuotePdf(
   doc.text("System estimate", 50, y);
   y += 6;
 
+  const rateLabel = `${customer.kW} kW x ${inr(breakdown.perKWRate)} / kW`;
   const rows: Array<[string, string, string]> = [
     [
-      "Solar Panel",
-      `${breakdown.panelQuantity} × ${breakdown.panelWattage} Wp · ${breakdown.panelTech} ${breakdown.panelCert}`,
-      inr(breakdown.solarPanel),
+      "Turnkey Solar System",
+      rateLabel,
+      inr(breakdown.total),
+    ],
+    [
+      "Solar Panels",
+      `${breakdown.panelQuantity} x ${breakdown.panelWattage} Wp - ${breakdown.panelTech}`,
+      "Included",
     ],
     [
       "Inverter",
-      `${customer.kW} kW · Single / Three Phase with WiFi connectivity`,
-      inr(breakdown.inverter),
+      `${customer.kW} kW - Single / Three Phase with WiFi connectivity`,
+      "Included",
     ],
     [
       "Mounting structure",
       "GI - Hot Dip - Machine cut",
-      inr(breakdown.mounting),
+      "Included",
     ],
     [
       "Installation",
-      "Net meter, labour & transport (flat)",
-      inr(breakdown.installation),
+      "Net meter, labour & transport",
+      "Included",
     ],
   ];
 
@@ -181,7 +187,7 @@ export function buildQuotePdf(
 
   const notes = [
     "Site survey and structural design",
-    "Tier-1 mono-PERC or Top Con solar panels",
+    "Tier-1 Bifacial or TopCon solar panels",
     "Branded grid-tied inverter with warranty",
     "Galvanized mounting structure",
     "DC/AC cabling, junction boxes & earthing",
@@ -219,7 +225,7 @@ export function buildQuotePdf(
   doc.setFontSize(9);
   doc.setTextColor(...SOFT);
   doc.text(
-    `${branding.phone}  ·  ${branding.email}  ·  ${branding.address}`,
+    `${branding.phone}  -  ${branding.email}  -  ${branding.address}`,
     50,
     fy + 40,
   );

@@ -46,35 +46,26 @@ export const EMAILJS = {
 };
 
 /**
- * Quotation pricing. Edit and redeploy whenever rates change.
+ * Quotation pricing. Simple per-kW flat rate, keyed on installation type.
+ *   Residential:              kW × residentialPerKW
+ *   Commercial / Industrial:  kW × commercialPerKW
  *
- * The quote has 4 line items:
- *   1. Solar Panel:    ceil(kW × 1000 / panelWattage) panels, priced per cert
- *                      (DCR for residential / NDCR for commercial & industrial)
- *   2. Inverter:       kW × inverterPerKW (single or three phase, WiFi-enabled)
- *   3. Mounting:       kW × mountingPerKW (GI - Hot Dip - Machine cut)
- *   4. Installation:   flat installationFlat (covers net meter, labour, transport)
+ * Panel count on the PDF is derived from the chosen panel technology's
+ * typical wattage (Bifacial ≈ 545 Wp, TopCon ≈ 550 Wp) — pricing no
+ * longer depends on it, so the customer picks the panel they want
+ * without affecting the quote total.
  *
- * Example — 5 kW residential, 545 Wp panels:
- *   Panels:       ceil(5000/545) = 10 × 20,000 = 200,000   (DCR)
- *   Inverter:     5 × 7,000      =  35,000
- *   Mounting:     5 × 8,000      =  40,000
- *   Installation: flat           =  20,000
- *   Total                        = 295,000
+ * Systems of 10 kW and above are directed to a human consultation —
+ * the form hides the PDF button at that size and routes to #contact.
  */
 export const QUOTE_RATES = {
-  // Panel pricing — depends on certification, not on wattage
-  panelUnitPriceDCR: 20000,   // residential, subsidy-eligible
-  panelUnitPriceNDCR: 15000,  // commercial / industrial, no subsidy
+  residentialPerKW: 60000,
+  commercialPerKW:  40000,
 
-  // Per-kW rates
-  inverterPerKW: 7000,
-  mountingPerKW: 8000,
+  // Wattage used only to derive panel count for display / PDF.
+  bifacialWattage: 545,
+  topConWattage:   550,
 
-  // Flat fee covering net meter, labour, and transport
-  installationFlat: 20000,
-
-  // Default panel wattage used if the form doesn't override it
-  // Common options: 545 (Bifacial), 550 (boundary), 600 (TopCon)
-  defaultPanelWattage: 545,
+  /** Above-or-equal this many kW, we redirect to contact instead of generating a PDF. */
+  contactThresholdKW: 10,
 };

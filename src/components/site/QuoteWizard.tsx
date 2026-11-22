@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { X, Loader2, Download } from "lucide-react";
-import { calculateQuote, formatINR } from "@/lib/quote";
+import { X, Loader2, Download, ArrowRight, Users } from "lucide-react";
+import { calculateQuote, formatINR, type PanelTech } from "@/lib/quote";
 import { EMAILJS, QUOTE_RATES, SETTINGS } from "@/content/settings";
 
 type QuoteForm = {
   kW: string;
   type: "residential" | "commercial" | "industrial";
-  panelWattage: string; // dropdown value, parsed to number on submit
+  panel: PanelTech;
   name: string;
   phone: string;
   email: string;
@@ -18,17 +18,13 @@ type QuoteForm = {
 const EMPTY: QuoteForm = {
   kW: "",
   type: "residential",
-  panelWattage: String(QUOTE_RATES.defaultPanelWattage),
+  panel: "Bifacial",
   name: "",
   phone: "",
   email: "",
 };
 
-const PANEL_WATTAGE_OPTIONS = [
-  { value: "545", label: "545 Wp · Bifacial" },
-  { value: "550", label: "550 Wp · TopCon" },
-  { value: "600", label: "600 Wp · TopCon" },
-];
+const PANEL_OPTIONS: PanelTech[] = ["Bifacial", "TopCon"];
 
 type Props = {
   open: boolean;
@@ -45,16 +41,12 @@ export function QuoteWizard({ open, onClose, initialKW }: Props) {
 
   useEffect(() => { setMounted(true); }, []);
 
-  // When the dialog opens with an initialKW (from the house builder CTA),
-  // seed the form so the customer doesn't have to retype the system size
-  // they just chose.
   useEffect(() => {
     if (open && initialKW !== undefined) {
       setForm((f) => ({ ...f, kW: String(initialKW) }));
     }
   }, [open, initialKW]);
 
-  // Lock background scroll while the dialog is open.
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -64,13 +56,32 @@ export function QuoteWizard({ open, onClose, initialKW }: Props) {
 
   if (!open || !mounted) return null;
 
+  // Systems above a threshold need a human consultation rather than an
+  // auto-generated PDF. The form shows a "Contact us" redirect card in
+  // place of the PDF button in that case.
+  const kWNum = Number(form.kW);
+  const kWValid = form.kW !== "" && !Number.isNaN(kWNum);
+  const needsContact = kWValid && kWNum >= QUOTE_RATES.contactThresholdKW;
+
   const validate = (): string | null => {
-    const kW = Number(form.kW);
-    if (!form.kW || isNaN(kW) || kW < 1 || kW > 1000) return "System size must be between 1 and 1000 kW.";
+    if (!form.kW || Number.isNaN(kWNum) || kWNum < 1 || kWNum > 1000) {
+      return "System size must be between 1 and 1000 kW.";
+    }
     if (form.name.trim().length < 2) return "Please enter your name.";
     if (form.phone.replace(/\D/g, "").length < 10) return "Please enter a valid phone number.";
     if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) return "Email looks invalid.";
     return null;
+  };
+
+  const goToContact = () => {
+    onClose();
+    // Give the dialog unmount a frame before scrolling so the sticky
+    // header's own offset lines up correctly.
+    requestAnimationFrame(() => {
+      const el = document.getElementById("contact");
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      else window.location.hash = "#contact";
+    });
   };
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -79,15 +90,18 @@ export function QuoteWizard({ open, onClose, initialKW }: Props) {
     const v = validate();
     if (v) { setError(v); return; }
 
+    if (needsContact) {
+      goToContact();
+      return;
+    }
+
     setSubmitting(true);
     try {
-      // Lazy-load the PDF builder so the ~80 KB jsPDF bundle isn't shipped on
-      // initial page load.
       const { buildQuotePdf } = await import("@/lib/pdf-browser");
 
       const breakdown = calculateQuote(
-        Number(form.kW),
-        Number(form.panelWattage) || QUOTE_RATES.defaultPanelWattage,
+        kWNum,
+        form.panel,
         form.type,
         QUOTE_RATES,
       );
@@ -97,7 +111,7 @@ export function QuoteWizard({ open, onClose, initialKW }: Props) {
         phone: form.phone.trim(),
         email: form.email.trim() || undefined,
         type: form.type,
-        kW: Number(form.kW),
+        kW: kWNum,
       };
 
       buildQuotePdf(customer, breakdown, {
@@ -107,9 +121,6 @@ export function QuoteWizard({ open, onClose, initialKW }: Props) {
         address: SETTINGS.address,
       });
 
-      // Fire-and-forget owner notification. PDF download is the user's primary
-      // outcome — if the email service is misconfigured or down, don't block
-      // them or surface a scary error.
       void notifyOwner(customer, breakdown);
 
       setForm(EMPTY);
@@ -156,16 +167,16 @@ export function QuoteWizard({ open, onClose, initialKW }: Props) {
 
           <Field label="Installation type">
             <select value={form.type} onChange={(e) => set("type", e.target.value as QuoteForm["type"])} className="qw-input">
-              <option value="residential">Residential (DCR · subsidy-eligible)</option>
-              <option value="commercial">Commercial (NDCR)</option>
-              <option value="industrial">Industrial (NDCR)</option>
+              <option value="residential">Residential</option>
+              <option value="commercial">Commercial</option>
+              <option value="industrial">Industrial</option>
             </select>
           </Field>
 
-          <Field label="Panel wattage">
-            <select value={form.panelWattage} onChange={(e) => set("panelWattage", e.target.value)} className="qw-input">
-              {PANEL_WATTAGE_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+          <Field label="Panel">
+            <select value={form.panel} onChange={(e) => set("panel", e.target.value as PanelTech)} className="qw-input">
+              {PANEL_OPTIONS.map((p) => (
+                <option key={p} value={p}>{p}</option>
               ))}
             </select>
           </Field>
@@ -187,20 +198,47 @@ export function QuoteWizard({ open, onClose, initialKW }: Props) {
 
           {error && <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>}
 
-          <button
-            type="submit"
-            disabled={submitting}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:opacity-60"
-          >
-            {submitting ? (
-              <><Loader2 className="h-4 w-4 animate-spin" /> Generating PDF…</>
-            ) : (
-              <><Download className="h-4 w-4" /> Download Quotation PDF</>
-            )}
-          </button>
-          <p className="text-center text-xs text-ink/50">
-            Your details are shared with our team so we can follow up — the PDF downloads instantly.
-          </p>
+          {needsContact ? (
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50/70 p-4">
+              <div className="flex items-start gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white">
+                  <Users className="h-4 w-4" />
+                </div>
+                <div className="flex-1 text-sm text-ink/80">
+                  <div className="font-semibold text-emerald-900">
+                    Systems of {QUOTE_RATES.contactThresholdKW} kW and above
+                  </div>
+                  <p className="mt-0.5 text-ink/65">
+                    For a project this size we tailor the design, panel mix, and timeline to your site — please reach out so we can build the right proposal.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={goToContact}
+                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+              >
+                Contact us <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          ) : (
+            <>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:opacity-60"
+              >
+                {submitting ? (
+                  <><Loader2 className="h-4 w-4 animate-spin" /> Generating PDF…</>
+                ) : (
+                  <><Download className="h-4 w-4" /> Download Quotation PDF</>
+                )}
+              </button>
+              <p className="text-center text-xs text-ink/50">
+                Your details are shared with our team so we can follow up — the PDF downloads instantly.
+              </p>
+            </>
+          )}
         </form>
       </div>
 
@@ -255,25 +293,17 @@ async function notifyOwner(
       EMAILJS.serviceId,
       EMAILJS.templateId,
       {
-        // Variables used by the current EmailJS template:
         name: customer.name,
         type: customer.type,
         size: String(customer.kW),
         number: customer.phone,
         mail: customer.email || "(not provided)",
 
-        // Extra variables — ignored unless you reference them in the
-        // EmailJS template. Add them to your template body to surface
-        // more detail in the notification email.
         total: formatINR(breakdown.total),
         panel_quantity: String(breakdown.panelQuantity),
         panel_wattage: `${breakdown.panelWattage} Wp`,
         panel_tech: breakdown.panelTech,
-        panel_cert: breakdown.panelCert,
-        solar_panel_cost: formatINR(breakdown.solarPanel),
-        inverter_cost: formatINR(breakdown.inverter),
-        mounting_cost: formatINR(breakdown.mounting),
-        installation_cost: formatINR(breakdown.installation),
+        per_kw_rate: formatINR(breakdown.perKWRate),
         date: new Date().toLocaleDateString("en-IN", {
           day: "2-digit",
           month: "long",
@@ -283,9 +313,6 @@ async function notifyOwner(
       { publicKey: EMAILJS.publicKey },
     );
   } catch (err) {
-    // Logged for diagnostics but never surfaced — the customer's PDF already
-    // downloaded successfully. Owner can re-check EmailJS dashboard if mails
-    // stop arriving.
     console.warn("EmailJS notification failed:", err);
   }
 }
