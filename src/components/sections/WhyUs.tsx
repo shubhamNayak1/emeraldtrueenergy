@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronDown, HeadphonesIcon, Leaf, ShieldCheck, Users, type LucideIcon } from "lucide-react";
 import { Reveal } from "@/components/motion/Reveal";
+import { SectionLabel } from "@/components/motion/SectionLabel";
 
 type Promise = { icon: LucideIcon; title: string; body: string };
 
@@ -40,16 +41,11 @@ export function WhyUs() {
   return (
     <section className="pt-6 pb-10 sm:pt-8 sm:pb-12">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <Reveal>
-          <div className="text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-              Why Emerald True Energy
-            </span>
-            <h2 className="mt-3 text-3xl font-bold text-emerald-900 sm:text-4xl md:text-5xl">
-              Built on four promises
-            </h2>
-          </div>
-        </Reveal>
+        <SectionLabel
+          number="03"
+          eyebrow="Why Emerald True Energy"
+          title="Built on four promises"
+        />
 
         <div className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:gap-5">
           {PROPS.map((p, i) => (

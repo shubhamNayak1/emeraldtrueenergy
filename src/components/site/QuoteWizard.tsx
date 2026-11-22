@@ -30,15 +30,29 @@ const PANEL_WATTAGE_OPTIONS = [
   { value: "600", label: "600 Wp · TopCon" },
 ];
 
-type Props = { open: boolean; onClose: () => void };
+type Props = {
+  open: boolean;
+  onClose: () => void;
+  /** Pre-fill the kW field (e.g. from the hero rooftop builder slider). */
+  initialKW?: number;
+};
 
-export function QuoteWizard({ open, onClose }: Props) {
+export function QuoteWizard({ open, onClose, initialKW }: Props) {
   const [form, setForm] = useState<QuoteForm>(EMPTY);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => { setMounted(true); }, []);
+
+  // When the dialog opens with an initialKW (from the house builder CTA),
+  // seed the form so the customer doesn't have to retype the system size
+  // they just chose.
+  useEffect(() => {
+    if (open && initialKW !== undefined) {
+      setForm((f) => ({ ...f, kW: String(initialKW) }));
+    }
+  }, [open, initialKW]);
 
   // Lock background scroll while the dialog is open.
   useEffect(() => {

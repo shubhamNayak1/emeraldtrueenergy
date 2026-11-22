@@ -17,6 +17,7 @@ const NAV = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const [quoteOpen, setQuoteOpen] = useState(false);
+  const [quoteInitialKW, setQuoteInitialKW] = useState<number | undefined>();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -24,6 +25,19 @@ export function Header() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // The hero SolarHouseBuilder's "Get your detailed quotation" button
+  // fires this event with the kW the user selected on the slider so the
+  // wizard opens with that value already filled in.
+  useEffect(() => {
+    const onOpenQuote = (e: Event) => {
+      const detail = (e as CustomEvent<{ kW?: number }>).detail;
+      setQuoteInitialKW(detail?.kW);
+      setQuoteOpen(true);
+    };
+    window.addEventListener("ete:open-quote", onOpenQuote);
+    return () => window.removeEventListener("ete:open-quote", onOpenQuote);
   }, []);
 
   return (
@@ -110,7 +124,11 @@ export function Header() {
         </div>
       )}
 
-      <QuoteWizard open={quoteOpen} onClose={() => setQuoteOpen(false)} />
+      <QuoteWizard
+        open={quoteOpen}
+        onClose={() => { setQuoteOpen(false); setQuoteInitialKW(undefined); }}
+        initialKW={quoteInitialKW}
+      />
     </header>
   );
 }

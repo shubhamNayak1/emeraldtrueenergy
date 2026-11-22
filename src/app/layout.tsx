@@ -4,6 +4,9 @@ import "./globals.css";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { WhatsAppFab } from "@/components/site/WhatsAppFab";
+import { ScrollProgress } from "@/components/motion/ScrollProgress";
+import { FloatingMolecules } from "@/components/motion/FloatingMolecules";
+import { LoadingSplash } from "@/components/motion/LoadingSplash";
 import { SETTINGS } from "@/content/settings";
 
 const display = Plus_Jakarta_Sans({
@@ -74,6 +77,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
+        <LoadingSplash />
+        <ScrollProgress />
+        <FloatingMolecules />
         <Header />
         <main>{children}</main>
         <Footer />

@@ -3,6 +3,7 @@
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { motion } from "motion/react";
 import { Reveal } from "@/components/motion/Reveal";
+import { SectionLabel } from "@/components/motion/SectionLabel";
 import { SETTINGS } from "@/content/settings";
 
 function whatsAppLink(phone: string, message?: string): string {
@@ -16,19 +17,12 @@ export function Contact() {
   return (
     <section id="contact" className="scroll-mt-20 pt-6 pb-10 sm:pt-8 sm:pb-12">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
-        <Reveal>
-          <div className="text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-              Get in touch
-            </span>
-            <h2 className="mt-3 text-3xl font-bold text-emerald-900 sm:text-4xl md:text-5xl">
-              Let's power your rooftop
-            </h2>
-            <p className="mx-auto mt-3 max-w-xl text-sm text-ink/65 sm:mt-4 sm:text-base">
-              The fastest way to reach us is WhatsApp — we typically reply within an hour.
-            </p>
-          </div>
-        </Reveal>
+        <SectionLabel
+          number="04"
+          eyebrow="Get in touch"
+          title="Let's power your rooftop"
+          sub="The fastest way to reach us is WhatsApp — we typically reply within an hour."
+        />
 
         <div className="mt-10 space-y-4">
           <Reveal>

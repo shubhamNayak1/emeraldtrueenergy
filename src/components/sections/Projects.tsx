@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronDown, MapPin, Zap } from "lucide-react";
 import { Reveal } from "@/components/motion/Reveal";
+import { SectionLabel } from "@/components/motion/SectionLabel";
 import { PROJECTS } from "@/content/projects";
 
 const MOBILE_INITIAL_COUNT = 4;
@@ -29,19 +30,12 @@ export function Projects() {
   return (
     <section id="projects" className="scroll-mt-20 bg-gradient-to-b from-emerald-50/40 via-emerald-50/20 to-cream pt-6 pb-10 sm:pt-8 sm:pb-12">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <Reveal>
-          <div className="text-center">
-            <span className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-              Recent projects
-            </span>
-            <h2 className="mt-3 text-3xl font-bold text-emerald-900 sm:text-4xl md:text-5xl">
-              Installations across Madhya Pradesh
-            </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-sm text-ink/65 sm:mt-4 sm:text-base">
-              A glimpse of real rooftops we've energized — click a city to filter.
-            </p>
-          </div>
-        </Reveal>
+        <SectionLabel
+          number="02"
+          eyebrow="Recent projects"
+          title="Installations across Madhya Pradesh"
+          sub="A glimpse of real rooftops we've energized — tap a city to filter."
+        />
 
         <Reveal delay={0.1}>
           <div className="mt-7 flex flex-wrap justify-center gap-2">
