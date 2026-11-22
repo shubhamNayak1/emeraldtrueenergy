@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { SETTINGS } from "@/content/settings";
 import { getTimeOfDay, type TimeOfDay } from "@/lib/sun";
+import { useT } from "@/i18n/LanguageProvider";
 
 // Background gradient shifts subtly across the day. Tailwind only ships
 // classes it sees as literal strings, so it's a fixed lookup.
@@ -19,6 +19,7 @@ const PHASE_BG: Record<TimeOfDay, string> = {
 
 export function Hero() {
   const reduce = useReducedMotion();
+  const { t } = useT();
   const [phase, setPhase] = useState<TimeOfDay>("day");
 
   useEffect(() => {
@@ -62,7 +63,7 @@ export function Hero() {
         >
           <span className="glass inline-flex items-center gap-2 rounded-full border border-emerald-200/80 px-3.5 py-1.5 text-xs font-semibold text-emerald-800 shadow-sm">
             <Sparkles className="h-3.5 w-3.5 text-sun-500" />
-            {SETTINGS.heroEyebrow}
+            {t("hero.eyebrow")}
           </span>
         </motion.div>
 
@@ -72,13 +73,13 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 0.08, ease: "easeOut" }}
           className="mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight text-emerald-900 sm:text-6xl md:text-7xl"
         >
-          <span className="block">{SETTINGS.heroTitle1}</span>
+          <span className="block">{t("hero.title1")}</span>
           <span className="block bg-gradient-to-r from-emerald-700 via-emerald-500 to-mint-400 bg-clip-text text-transparent">
-            {SETTINGS.heroTitle2}
+            {t("hero.title2")}
           </span>
           <span className="relative inline-block">
             <span className="relative z-10 bg-gradient-to-r from-sun-600 via-sun-500 to-sun-400 bg-clip-text text-transparent">
-              {SETTINGS.heroTitle3}
+              {t("hero.title3")}
             </span>
             <motion.span
               aria-hidden
@@ -96,7 +97,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.25 }}
           className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-ink/70 sm:text-lg"
         >
-          {SETTINGS.heroSubtitle}
+          {t("hero.subtitle")}
         </motion.p>
 
         <motion.div
@@ -109,7 +110,7 @@ export function Hero() {
             href="#contact"
             className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-emerald-600 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-emerald-600/25 transition hover:shadow-xl hover:shadow-emerald-600/40"
           >
-            <span className="relative z-10">Talk to us</span>
+            <span className="relative z-10">{t("hero.cta.primary")}</span>
             <ArrowRight className="relative z-10 h-4 w-4 transition-transform group-hover:translate-x-1" />
             <span className="absolute inset-0 -z-0 bg-gradient-to-r from-emerald-500 via-emerald-600 to-mint-400 opacity-0 transition-opacity group-hover:opacity-100" />
           </Link>
@@ -117,7 +118,7 @@ export function Hero() {
             href="#projects"
             className="glass inline-flex items-center gap-2 rounded-full border border-emerald-200 px-7 py-3.5 text-sm font-semibold text-emerald-800 transition hover:-translate-y-0.5 hover:border-emerald-400"
           >
-            See our work
+            {t("hero.cta.secondary")}
           </Link>
         </motion.div>
 
@@ -128,9 +129,9 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] font-medium uppercase tracking-[0.15em] text-emerald-900/60 sm:text-xs"
         >
-          <TrustDot>100+ installations</TrustDot>
-          <TrustDot>6 cities in MP</TrustDot>
-          <TrustDot>Tier-1 components</TrustDot>
+          <TrustDot>{t("hero.trust.installs")}</TrustDot>
+          <TrustDot>{t("hero.trust.cities")}</TrustDot>
+          <TrustDot>{t("hero.trust.components")}</TrustDot>
         </motion.div>
       </div>
 

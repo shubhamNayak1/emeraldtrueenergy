@@ -5,37 +5,23 @@ import { AnimatePresence, motion } from "motion/react";
 import { ChevronDown, HeadphonesIcon, Leaf, ShieldCheck, Users, type LucideIcon } from "lucide-react";
 import { Reveal } from "@/components/motion/Reveal";
 import { SectionLabel } from "@/components/motion/SectionLabel";
+import { useT } from "@/i18n/LanguageProvider";
+import type { TKey } from "@/i18n/translations";
 
-type Promise = { icon: LucideIcon; title: string; body: string };
+type Promise = { icon: LucideIcon; titleKey: TKey; bodyKey: TKey };
 
 const PROPS: Promise[] = [
-  {
-    icon: ShieldCheck,
-    title: "Tier-1 components only",
-    body: "Mono-PERC and TopCon panels, branded inverters, and galvanized hot-dip mounting — every part is specified for 25+ years of outdoor service.",
-  },
-  {
-    icon: Users,
-    title: "Our team end-to-end",
-    body: "No subcontractors shuffling your project. The same engineers survey, design, install, and commission — one point of accountability.",
-  },
-  {
-    icon: HeadphonesIcon,
-    title: "After-install support",
-    body: "Net-meter paperwork with DISCOM, annual cleaning, monitoring, and AMC — all handled in-house so your system keeps generating peak.",
-  },
-  {
-    icon: Leaf,
-    title: "Honest numbers",
-    body: "The quotation you download is the quotation we honor — itemized, with no hidden add-ons after installation starts.",
-  },
+  { icon: ShieldCheck,    titleKey: "why.1.title", bodyKey: "why.1.body" },
+  { icon: Users,          titleKey: "why.2.title", bodyKey: "why.2.body" },
+  { icon: HeadphonesIcon, titleKey: "why.3.title", bodyKey: "why.3.body" },
+  { icon: Leaf,           titleKey: "why.4.title", bodyKey: "why.4.body" },
 ];
 
 export function WhyUs() {
+  const { t } = useT();
   // Single shared state across all four cards. When any one is tapped on
   // mobile, every card expands together — otherwise the row-mate card
-  // would stretch to match the open card's height but show no content,
-  // leaving an awkward empty box.
+  // would stretch to match the open card's height but show no content.
   const [open, setOpen] = useState(false);
 
   return (
@@ -43,15 +29,17 @@ export function WhyUs() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionLabel
           number="03"
-          eyebrow="Why Emerald True Energy"
-          title="Built on four promises"
+          eyebrow={t("why.eyebrow")}
+          title={t("why.title")}
         />
 
         <div className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:gap-5">
           {PROPS.map((p, i) => (
-            <Reveal key={p.title} delay={(i % 2) * 0.1} className="h-full">
+            <Reveal key={p.titleKey} delay={(i % 2) * 0.1} className="h-full">
               <PromiseCard
-                promise={p}
+                icon={p.icon}
+                title={t(p.titleKey)}
+                body={t(p.bodyKey)}
                 open={open}
                 onToggle={() => setOpen((v) => !v)}
               />
@@ -64,16 +52,18 @@ export function WhyUs() {
 }
 
 function PromiseCard({
-  promise,
+  icon: Icon,
+  title,
+  body,
   open,
   onToggle,
 }: {
-  promise: Promise;
+  icon: LucideIcon;
+  title: string;
+  body: string;
   open: boolean;
   onToggle: () => void;
 }) {
-  const Icon = promise.icon;
-
   return (
     <div className="group relative h-full overflow-hidden rounded-2xl border border-emerald-100 bg-white transition-shadow hover:shadow-lg hover:shadow-emerald-900/5 sm:rounded-3xl">
       <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-emerald-50 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
@@ -89,7 +79,7 @@ function PromiseCard({
           </div>
           <div className="flex min-w-0 flex-1 items-start gap-1.5 sm:gap-2">
             <h3 className="min-w-0 flex-1 break-words text-sm font-semibold leading-tight text-emerald-900 sm:text-lg">
-              {promise.title}
+              {title}
             </h3>
             <ChevronDown
               aria-hidden
@@ -110,12 +100,12 @@ function PromiseCard({
                 transition={{ duration: 0.25, ease: "easeOut" }}
                 className="overflow-hidden text-xs leading-relaxed text-ink/65 sm:hidden"
               >
-                <span className="block pt-3">{promise.body}</span>
+                <span className="block pt-3">{body}</span>
               </motion.p>
             )}
           </AnimatePresence>
           <p className="hidden text-sm leading-relaxed text-ink/65 sm:block">
-            {promise.body}
+            {body}
           </p>
         </div>
       </button>

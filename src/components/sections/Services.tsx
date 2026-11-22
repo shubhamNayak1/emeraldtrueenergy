@@ -4,26 +4,37 @@ import { motion } from "motion/react";
 import { Sun, Battery, Factory, Droplets, Wrench, FileCheck } from "lucide-react";
 import { Reveal } from "@/components/motion/Reveal";
 import { SectionLabel } from "@/components/motion/SectionLabel";
-import { SERVICES } from "@/content/services";
+import { useT } from "@/i18n/LanguageProvider";
+import type { TKey } from "@/i18n/translations";
 
 const ICONS = [Sun, Battery, Factory, Droplets, Wrench, FileCheck];
 
+const SERVICE_KEYS: Array<{ titleKey: TKey; bodyKey: TKey }> = [
+  { titleKey: "services.1.title", bodyKey: "services.1.body" },
+  { titleKey: "services.2.title", bodyKey: "services.2.body" },
+  { titleKey: "services.3.title", bodyKey: "services.3.body" },
+  { titleKey: "services.4.title", bodyKey: "services.4.body" },
+  { titleKey: "services.5.title", bodyKey: "services.5.body" },
+  { titleKey: "services.6.title", bodyKey: "services.6.body" },
+];
+
 export function Services() {
+  const { t } = useT();
   return (
     <section id="services" className="relative scroll-mt-20 pt-6 pb-10 sm:pt-8 sm:pb-12">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionLabel
           number="01"
-          eyebrow="What we do"
-          title="Solar solutions for every roof"
-          sub="From small homes to commercial sites, we design and install systems sized to your bill — with full end-to-end support."
+          eyebrow={t("services.eyebrow")}
+          title={t("services.title")}
+          sub={t("services.sub")}
         />
 
         <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
-          {SERVICES.map((s, i) => {
+          {SERVICE_KEYS.map((s, i) => {
             const Icon = ICONS[i % ICONS.length];
             return (
-              <Reveal key={s.title} delay={(i % 3) * 0.08} className="h-full">
+              <Reveal key={s.titleKey} delay={(i % 3) * 0.08} className="h-full">
                 <motion.article
                   whileHover={{ y: -6 }}
                   transition={{ type: "spring", stiffness: 320, damping: 22 }}
@@ -35,10 +46,10 @@ export function Services() {
                       <Icon className="h-5 w-5 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6 sm:h-6 sm:w-6" />
                     </div>
                     <h3 className="mt-3 text-sm font-semibold leading-tight text-emerald-900 sm:mt-5 sm:text-lg">
-                      {s.title}
+                      {t(s.titleKey)}
                     </h3>
                     <p className="mt-1.5 text-xs leading-relaxed text-ink/65 sm:mt-2 sm:text-sm">
-                      {s.description}
+                      {t(s.bodyKey)}
                     </p>
                   </div>
                 </motion.article>

@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { Reveal } from "@/components/motion/Reveal";
 import { SectionLabel } from "@/components/motion/SectionLabel";
 import { SETTINGS } from "@/content/settings";
+import { useT } from "@/i18n/LanguageProvider";
 
 function whatsAppLink(phone: string, message?: string): string {
   const clean = phone.replace(/[^\d]/g, "");
@@ -12,6 +13,7 @@ function whatsAppLink(phone: string, message?: string): string {
 }
 
 export function Contact() {
+  const { t } = useT();
   const waConfigured = SETTINGS.ownerWhatsApp && !SETTINGS.ownerWhatsApp.includes("XXXX");
 
   return (
@@ -19,16 +21,16 @@ export function Contact() {
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <SectionLabel
           number="04"
-          eyebrow="Get in touch"
-          title="Let's power your rooftop"
-          sub="The fastest way to reach us is WhatsApp — we typically reply within an hour."
+          eyebrow={t("contact.eyebrow")}
+          title={t("contact.title")}
+          sub={t("contact.sub")}
         />
 
         <div className="mt-10 space-y-4">
           <Reveal>
             {waConfigured ? (
               <motion.a
-                href={whatsAppLink(SETTINGS.ownerWhatsApp, "Hi! I'd like to discuss a solar installation.")}
+                href={whatsAppLink(SETTINGS.ownerWhatsApp, t("contact.wa.msg"))}
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ y: -4 }}
@@ -40,10 +42,10 @@ export function Contact() {
                 </div>
                 <div className="flex-1">
                   <div className="text-xs font-semibold uppercase tracking-[0.15em] opacity-90">
-                    Chat on WhatsApp
+                    {t("contact.wa.label")}
                   </div>
                   <div className="mt-1 text-lg font-bold sm:text-xl">{SETTINGS.ownerWhatsApp}</div>
-                  <div className="mt-0.5 text-xs opacity-80 sm:text-sm">Tap to open WhatsApp</div>
+                  <div className="mt-0.5 text-xs opacity-80 sm:text-sm">{t("contact.wa.hint")}</div>
                 </div>
                 <svg className="hidden h-5 w-5 opacity-70 transition-transform group-hover:translate-x-1 sm:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12" />
@@ -52,7 +54,7 @@ export function Contact() {
               </motion.a>
             ) : (
               <div className="rounded-3xl border border-dashed border-emerald-200 bg-white/60 p-6 text-center text-sm text-ink/55">
-                Owner WhatsApp number not set yet.
+                {t("contact.wa.missing")}
               </div>
             )}
           </Reveal>
@@ -62,7 +64,7 @@ export function Contact() {
               <ContactCard
                 href={`tel:${SETTINGS.publicPhone.replace(/\s+/g, "")}`}
                 icon={<Phone className="h-5 w-5" />}
-                label="Call us"
+                label={t("contact.call")}
                 detail={SETTINGS.publicPhone}
               />
             </Reveal>
@@ -70,7 +72,7 @@ export function Contact() {
               <ContactCard
                 href={`mailto:${SETTINGS.publicEmail}?subject=${encodeURIComponent("Solar enquiry")}`}
                 icon={<Mail className="h-5 w-5" />}
-                label="Email us"
+                label={t("contact.email")}
                 detail={SETTINGS.publicEmail}
               />
             </Reveal>
@@ -83,11 +85,11 @@ export function Contact() {
               </div>
               <div>
                 <div className="text-xs font-semibold uppercase tracking-wider text-emerald-800">
-                  Where we are
+                  {t("contact.where")}
                 </div>
-                <div className="mt-0.5 text-sm font-bold text-ink sm:text-base">{SETTINGS.address}</div>
+                <div className="mt-0.5 text-sm font-bold text-ink sm:text-base">{t("common.address")}</div>
                 <p className="mt-1 text-xs text-ink/60 sm:text-sm">
-                  Site visits across Madhya Pradesh — get in touch and we'll set one up.
+                  {t("contact.area")}
                 </p>
               </div>
             </div>

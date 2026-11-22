@@ -6,24 +6,30 @@ import { ChevronDown, MapPin, Zap } from "lucide-react";
 import { Reveal } from "@/components/motion/Reveal";
 import { SectionLabel } from "@/components/motion/SectionLabel";
 import { PROJECTS } from "@/content/projects";
+import { useT } from "@/i18n/LanguageProvider";
 
 const MOBILE_INITIAL_COUNT = 4;
 
+// Sentinel used internally for the unfiltered state. Displayed label is
+// translated via t("projects.all").
+const ALL = "__all__";
+
 export function Projects() {
+  const { t } = useT();
   const cities = useMemo(() => {
     const set = new Set<string>();
     for (const p of PROJECTS) {
       const city = p.location.split(",")[0]!.trim();
       set.add(city);
     }
-    return ["All", ...Array.from(set).sort()];
+    return [ALL, ...Array.from(set).sort()];
   }, []);
 
-  const [filter, setFilter] = useState("All");
+  const [filter, setFilter] = useState(ALL);
   const [showAllMobile, setShowAllMobile] = useState(false);
 
   const visible = PROJECTS.filter(
-    (p) => filter === "All" || p.location.startsWith(filter),
+    (p) => filter === ALL || p.location.startsWith(filter),
   );
   const hiddenOnMobile = Math.max(0, visible.length - MOBILE_INITIAL_COUNT);
 
@@ -32,9 +38,9 @@ export function Projects() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionLabel
           number="02"
-          eyebrow="Recent projects"
-          title="Installations across Madhya Pradesh"
-          sub="A glimpse of real rooftops we've energized — tap a city to filter."
+          eyebrow={t("projects.eyebrow")}
+          title={t("projects.title")}
+          sub={t("projects.sub")}
         />
 
         <Reveal delay={0.1}>
@@ -51,7 +57,7 @@ export function Projects() {
                       : "bg-white text-ink/70 ring-1 ring-emerald-100 hover:bg-emerald-50 hover:text-emerald-800"
                   }`}
                 >
-                  {c}
+                  {c === ALL ? t("projects.all") : c}
                 </button>
               );
             })}
@@ -89,7 +95,7 @@ export function Projects() {
                   </div>
                   <div className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-black/55 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur">
                     <Zap className="h-3 w-3 fill-sun-300 text-sun-300" />
-                    {p.kW ? `${p.kW} kW` : "Rooftop"}
+                    {p.kW ? `${p.kW} kW` : t("projects.rooftop")}
                   </div>
                   <div className="p-5">
                     <h3 className="font-semibold text-emerald-900">{p.title}</h3>
@@ -111,7 +117,7 @@ export function Projects() {
               onClick={() => setShowAllMobile((v) => !v)}
               className="group inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-5 py-2.5 text-sm font-semibold text-emerald-800 shadow-sm transition hover:border-emerald-400 hover:shadow-md"
             >
-              {showAllMobile ? "Show less" : `Show all ${visible.length} projects`}
+              {showAllMobile ? t("projects.showLess") : t("projects.showAll", { n: visible.length })}
               <ChevronDown
                 className={`h-4 w-4 transition-transform ${showAllMobile ? "rotate-180" : ""}`}
               />

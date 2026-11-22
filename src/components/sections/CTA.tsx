@@ -4,9 +4,11 @@ import Link from "next/link";
 import { ArrowRight, Sun } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { Reveal } from "@/components/motion/Reveal";
+import { useT } from "@/i18n/LanguageProvider";
 
 export function CTA() {
   const reduce = useReducedMotion();
+  const { t } = useT();
 
   return (
     <section className="py-8 sm:py-10">
@@ -52,17 +54,17 @@ export function CTA() {
               </motion.div>
 
               <h2 className="mt-6 text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">
-                Ready to switch to solar?
+                {t("cta.title")}
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-sm text-emerald-50/90 sm:text-base">
-                Get a personalized quotation in under a minute — designed around your roof, your bill, and your goals.
+                {t("cta.sub")}
               </p>
               <div className="mt-8 flex flex-wrap justify-center gap-3">
                 <Link
                   href="#contact"
                   className="group/btn inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-emerald-700 shadow-xl shadow-black/10 transition hover:scale-105 hover:bg-emerald-50"
                 >
-                  Talk to us
+                  {t("cta.btn")}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
                 </Link>
               </div>

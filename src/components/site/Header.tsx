@@ -3,22 +3,24 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, Languages } from "lucide-react";
 import { Logo } from "../Logo";
 import { QuoteWizard } from "./QuoteWizard";
 import { SETTINGS } from "@/content/settings";
-
-const NAV = [
-  { href: "/#services", label: "Services" },
-  { href: "/#projects", label: "Projects" },
-  { href: "/#contact",  label: "Contact" },
-];
+import { useT } from "@/i18n/LanguageProvider";
 
 export function Header() {
+  const { t, lang, setLang } = useT();
   const [open, setOpen] = useState(false);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [quoteInitialKW, setQuoteInitialKW] = useState<number | undefined>();
   const [scrolled, setScrolled] = useState(false);
+
+  const NAV = [
+    { href: "/#services", label: t("nav.services") },
+    { href: "/#projects", label: t("nav.projects") },
+    { href: "/#contact",  label: t("nav.contact")  },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -27,9 +29,6 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // The hero SolarHouseBuilder's "Get your detailed quotation" button
-  // fires this event with the kW the user selected on the slider so the
-  // wizard opens with that value already filled in.
   useEffect(() => {
     const onOpenQuote = (e: Event) => {
       const detail = (e as CustomEvent<{ kW?: number }>).detail;
@@ -39,6 +38,10 @@ export function Header() {
     window.addEventListener("ete:open-quote", onOpenQuote);
     return () => window.removeEventListener("ete:open-quote", onOpenQuote);
   }, []);
+
+  const toggleLang = () => setLang(lang === "en" ? "hi" : "en");
+  // Button shows the OTHER language — i.e. what you'll switch TO.
+  const otherLabel = lang === "en" ? "हिन्दी" : "EN";
 
   return (
     <header
@@ -68,6 +71,16 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          <button
+            type="button"
+            onClick={toggleLang}
+            aria-label={t("lang.toggleAria")}
+            className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-white/80 px-3 py-2 text-xs font-semibold text-emerald-800 shadow-sm backdrop-blur transition-all hover:-translate-y-0.5 hover:border-emerald-400 hover:bg-white sm:text-sm"
+          >
+            <Languages className="h-3.5 w-3.5" />
+            <span>{otherLabel}</span>
+          </button>
+
           <a
             href={`tel:${SETTINGS.publicPhone.replace(/\s+/g, "")}`}
             className="group inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white/80 px-3 py-2 text-sm font-semibold text-emerald-800 shadow-sm backdrop-blur transition-all hover:-translate-y-0.5 hover:border-emerald-400 hover:bg-white hover:shadow-md sm:px-4 sm:py-2.5"
@@ -77,7 +90,7 @@ export function Header() {
               <Phone className="h-3.5 w-3.5" />
               <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400 opacity-30 group-hover:opacity-0" />
             </span>
-            <span>{SETTINGS.publicPhone}</span>
+            <span className="hidden sm:inline">{SETTINGS.publicPhone}</span>
           </a>
 
           <button
@@ -85,7 +98,7 @@ export function Header() {
             onClick={() => setQuoteOpen(true)}
             className="group relative hidden items-center gap-2 overflow-hidden rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-600/20 transition-all hover:scale-105 hover:shadow-lg hover:shadow-emerald-600/40 md:inline-flex"
           >
-            <span className="relative z-10">Get Quotation</span>
+            <span className="relative z-10">{t("nav.getQuote")}</span>
             <span className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-emerald-700 opacity-0 transition-opacity group-hover:opacity-100" />
           </button>
 
@@ -118,7 +131,7 @@ export function Header() {
               onClick={() => { setOpen(false); setQuoteOpen(true); }}
               className="mt-2 w-full rounded-full bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white"
             >
-              Get Quotation
+              {t("nav.getQuote")}
             </button>
           </nav>
         </div>
